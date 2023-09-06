@@ -1,5 +1,5 @@
 project:
-  name: quickstart-duo-mfa
+  name: cfn-ps-duo-mfa
   owner: quickstart-eng@amazon.com
   shorten_stack_name: true
   package_lambda: false
