@@ -1,10 +1,23 @@
-This guide covers the information you need to deploy the {partner-product-name} Partner Solution in the AWS Cloud.
+This Partner Solution deploys {partner-product-name} to the AWS Cloud. If you are unfamiliar with AWS Partner Solutions, refer to the https://fwd.aws/rA69w?[AWS Partner Solution General Information Guide^].
 
-// Fill in the info in <angle brackets> for use on the landing page only: 
-This Amazon Web Services (AWS) Partner Solution deploys [<product name>](<partner's marketing product page>) in the AWS Cloud so that <purpose>. This solution is for <target users> who want to <do what> so that <why>. For more information, refer to the [<product name> documentation](<URL>).
+=== Security
 
-// Deploying this solution does not guarantee an organization’s compliance with any laws, certifications, policies, or other regulations. [Uncomment this statement only for solutions that relate to compliance. We'll add the corresponding reference part to the landing page and get legal approval before publishing.]
+NOTE: On May 26, 2022, Duo released version 5.7.1 of the Duo Authentication Proxy. This includes patches for two vulnerabilities that are described in the following points. 
 
-// For advanced information about the product, troubleshooting, or additional functionality, refer to the https://{partner-solution-github-org}.github.io/{partner-solution-project-name}/operational/index.html[Operational Guide^].
+Duo has fixed the following IP address vulnerabilities by updating Python to version 3.8.12 and replacing its third-party library with the https://docs.python.org/3/library/ipaddress.html[IPv4/IPv6 manipulation library^]. For more information, refer to https://duo.com/docs/authproxy-notes[Authentication Proxy—Release Notes^].
 
-// For information about using this Partner Solution for migrations, refer to the https://{partner-solution-github-org}.github.io/{partner-solution-project-name}/migration/index.html[Migration Guide^].
+* A vulnerability  mishandles IP address strings. For more information, refer to https://nvd.nist.gov/vuln/detail/CVE-2021-29921[CVE-2021-29921 Detail^].
+* A vulnerability improperly computes hash values in `IPv4Interface` and `IPv6Interface` classes. For more information, refer to https://nvd.nist.gov/vuln/detail/CVE-2020-14422[CVE-2020-14422 Detail^].
+
+WARNING: A vulnerability of Twisted version 21.2.0 remains unresolved for Authentication Proxy 5.7.1. This vulnerability parses HTTP requests without validating that the requests conform to https://datatracker.ietf.org/doc/html/rfc7230[RFC 7230^]. The Authentication Proxy is only vulnerable to this exploit if it's configured to use `http_proxy`. For more information, refer to https://nvd.nist.gov/vuln/detail/CVE-2022-24801[CVE-2022-24801^]. Duo is upgrading Twisted to version 22, but version 21.2.0 remains a high risk until a fix is released, which will be announced in the https://community.duo.com/c/release-notes/27[Duo Community Release Notes^].
+
+WARNING: Python library (`python-cryptography`) version 3.2 is vulnerable to Bleichenbacher timing attacks. This vulnerability remains for Authentication Proxy 5.7.1, but the Duo team has confirmed that Authentication Proxy doesn't use vulnerable RSA (Rivest-Shamir-Adleman) decryption API code and has concluded that the Authentication Proxy is not exposed to this vulnerability. For more information, refer to https://nvd.nist.gov/vuln/detail/CVE-2020-25659[CVE-2020-25659 Detail^].
+
+=== Additional security resources
+
+To take advantage of Duo's security fixes and latest features, run the latest software version. To determine the version of your Authentication Proxy, refer to https://help.duo.com/s/article/3356[How do I determine my installed Duo Authentication Proxy application version?^] If you use the Authentication Proxy version included in https://duo.com/partnerships/technology-partners/select-partners/amazon-web-services[Duo + Amazon Web Services^], you are running the latest version. For more information, refer to the following resources:
+
+* https://community.duo.com/t/how-to-subscribe-to-release-notes/5531[How to subscribe to Release Notes^]
+* https://duo.com/docs/authproxy-reference#upgrading-the-proxy[Upgrading the Proxy^]
+* https://duo.com/docs/authproxy-notes#version-5.7.1-may-26,-2022[Duo Authentication Proxy—Release Notes Version 5.7.1—May 26, 2022^]
+* https://community.duo.com/t/d241-release-notes-for-may-27-2022/12301[Duo Authentication Proxy D241: Release Notes for May 27, 2022^]

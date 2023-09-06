@@ -1,3 +1,26 @@
 //Include any predeployment steps here, such as signing up for a Marketplace AMI or making any changes to a partner account. If there are no predeployment steps, leave this file empty.
 
 == Predeployment steps
+
+You must set up at least one Duo user whose email address is associated with at least one user in Microsoft Active Directory.
+
+=== Prepare your Duo account
+
+. If you don't already have a Duo account, https://signup.duo.com/[sign up for one^].
+. Log in to the Duo administrator panel.
+* Accounts other than federal: https://admin.duosecurity.com/login[https://admin.duosecurity.com/login^] 
+* Federal accounts: https://admin.duofederal.com[https://admin.duofederal.com^]
+. Navigate to *Applications*.
+. Obtain the integration key, secret key, and API hostname. You will enter these three items as template parameter values when you deploy this Partner Solution. 
+* If directory synchronization is not required, do the following:
+.. Choose *Protect an Application*.
+.. In the applications list, locate the entry for *AWS Directory Services* by searching for *AWS Partner Solution*. On the far right, choose *Protect*.
+.. Configure the application, and get your integration key, secret key, and API hostname. Write down these three items. For details, see https://duo.com/docs/protecting-applications[Protecting Applications^]. 
+* If directory synchronization is required, do the following:
+.. Set up directory synchronization by following the steps in https://duo.com/docs/adsync[Synchronizing Users from Active Directory^].
+.. From the Duo administrator panel, choose *Users*. Then choose *Directory Sync*, *New Directory*, *On-Premises Active Directory* (even if AWS Managed Microsoft AD).
+.. Enter a directory name (which you need to identify the directory in Duo), the host IPs, and the port. (You can enter the other IP and port for the second domain controller as part of configuring directory synchronization.)
+.. For *Authentication Type*, choose *NTLMv2*. Enter the base DN (distinguished name) following the instructions.
+.. If needed, change other settings.
+.. Choose *Add Directory.*
+.. After the screen refreshes, scroll to the bottom, where you see the integration key, secret key, and API hostname. Write down these three items.
