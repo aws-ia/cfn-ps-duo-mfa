@@ -135,7 +135,7 @@ Parameters:
   QSS3BucketName:
     Description: S3 bucket name for the Quick Start assets.
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    Default: aws-quickstart
+    Default: aws-ia-us-east-1
     Type: String
   
   QSS3BucketRegion:
@@ -146,7 +146,7 @@ Parameters:
   QSS3KeyPrefix:
     Description: S3 key prefix for the Quick Start assets.
     AllowedPattern: ^[0-9a-zA-Z-/]*$
-    Default: quickstart-duo-mfa/
+    Default: cfn-ps-duo-mfa/
     Type: String
 
 #-----------------------------------------------------------
@@ -154,7 +154,7 @@ Parameters:
 #-----------------------------------------------------------
 
 Conditions:
-  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-ia-us-east-1']
 
 #-----------------------------------------------------------
 # Resources
