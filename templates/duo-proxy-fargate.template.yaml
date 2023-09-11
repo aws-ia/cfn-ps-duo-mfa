@@ -1,25 +1,19 @@
-# Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
-# SPDX-License-Identifier: MIT-0
-# AWS Customer Agreement - https://aws.amazon.com/agreement
 AWSTemplateFormatVersion: 2010-09-09
-Description: >
-  Configures Duo RADIUS ECS services using Fargate for use in Directory Service MFA (can be used
-  for AWS SSO, WorkSpaces, and other SAML service providers) (qs-1s5bmdj30)
-
+Description: "Configures Duo RADIUS ECS services using Fargate for use in Directory Service MFA (can be used for AWS SSO, WorkSpaces, and other SAML service providers) (qs-1s5bmdj30)\n"
 Metadata:
   QuickStartDocumentation:
-    EntrypointName: "Parameters for deploying into an existing VPC"
-    Order: "2"
+    EntrypointName: Parameters for deploying into an existing VPC
+    Order: '2'
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
-            default: Duo account settings
+          default: Duo account settings
         Parameters:
           - DuoIntegrationKey
           - DuoSecretKey
           - DuoApiHostName
       - Label:
-            default: RADIUS proxy configuration settings
+          default: RADIUS proxy configuration settings
         Parameters:
           - DirectoryServiceId
           - DirectoryServiceType
@@ -28,9 +22,8 @@ Metadata:
           - DuoFailMode
           - DuoMaxCapacity
           - NotificationEmail
-
       - Label:
-            default: Directory Sync configuration settings
+          default: Directory Sync configuration settings
         Parameters:
           - AdSync
           - DirectoryIntegrationKey
@@ -38,24 +31,21 @@ Metadata:
           - adReadOnlyUser
           - adReadOnlyPassword
       - Label:
-            default: Duo Authentication Proxy ECR configuration
+          default: Duo Authentication Proxy ECR configuration
         Parameters:
           - EcrImageRetention
           - EcrRepoName
-          
       - Label:
-            default: CodeCommit configuration
+          default: CodeCommit configuration
         Parameters:
           - CodeCommitRepoName
           - CodeCommitBranchName
-          # - CodeCommitS3Bucket
-          # - CodeCommitS3BucketKey
       - Label:
-            default: CodePipeline configuration
+          default: CodePipeline configuration
         Parameters:
           - EcrCronExpression
       - Label:
-            default: AWS KMS configuration
+          default: AWS KMS configuration
         Parameters:
           - AdminArn
       - Label:
@@ -65,99 +55,77 @@ Metadata:
           - QSS3BucketRegion
           - QSS3KeyPrefix
     ParameterLabels:
-        AdminArn:
-          default: AWS KMS administrator role ARN
-        # CodeCommitS3Bucket:
-        #   default: CodeCommit S3 Bucket
-        # CodeCommitS3BucketKey:
-        #   default: CodeCommit S3 Bucket Key
-        EcrRepoName:
-          default: ECR repo name
-        EcrImageRetention:
-          default: ECR retention period
-        CodeCommitRepoName:
-          default: CodeCommit repo name
-        CodeCommitBranchName:
-          default: CodeCommit branch name
-        EcrCronExpression:
-          default: ECR rebuild cron expression
-        NotificationEmail:
-          default: Duo administrator email
-        DuoMaxCapacity:
-          default: Duo maximum tasks
-        AdSync:
-          default: Sync Active Directory
-        adReadOnlyUser:
-          default: Active Directory read-only user
-        adReadOnlyPassword:
-          default: Active Directory read-only password
-        DirectoryIntegrationKey:
-          default: Duo directory integration key
-        DirectorySecretKey:
-          default: Duo directory secret key
-        DuoIntegrationKey:
-          default: Duo integration key
-        DuoSecretKey:
-          default: Duo secret key
-        DuoApiHostName:
-          default: Duo API hostname
-        DirectoryServiceId:
-          default: Directory Service ID
-        DirectoryServiceType:
-          default: Directory Service Type
-        RadiusProxyServerCount:
-          default: RADIUS proxy server count
-        RadiusPortNumber:
-          default: RADIUS port number
-        DuoFailMode:
-          default: Duo fail mode
-        QSS3BucketName:
-          default: Quick Start S3 bucket name
-        QSS3BucketRegion:
-          default: Quick Start S3 bucket Region
-        QSS3KeyPrefix:
-          default: Quick Start S3 key prefix
-#-----------------------------------------------------------
-# Parameters
-#-----------------------------------------------------------
-
+      AdminArn:
+        default: AWS KMS administrator role ARN
+      EcrRepoName:
+        default: ECR repo name
+      EcrImageRetention:
+        default: ECR retention period
+      CodeCommitRepoName:
+        default: CodeCommit repo name
+      CodeCommitBranchName:
+        default: CodeCommit branch name
+      EcrCronExpression:
+        default: ECR rebuild cron expression
+      NotificationEmail:
+        default: Duo administrator email
+      DuoMaxCapacity:
+        default: Duo maximum tasks
+      AdSync:
+        default: Sync Active Directory
+      adReadOnlyUser:
+        default: Active Directory read-only user
+      adReadOnlyPassword:
+        default: Active Directory read-only password
+      DirectoryIntegrationKey:
+        default: Duo directory integration key
+      DirectorySecretKey:
+        default: Duo directory secret key
+      DuoIntegrationKey:
+        default: Duo integration key
+      DuoSecretKey:
+        default: Duo secret key
+      DuoApiHostName:
+        default: Duo API hostname
+      DirectoryServiceId:
+        default: Directory Service ID
+      DirectoryServiceType:
+        default: Directory Service Type
+      RadiusProxyServerCount:
+        default: RADIUS proxy server count
+      RadiusPortNumber:
+        default: RADIUS port number
+      DuoFailMode:
+        default: Duo fail mode
+      QSS3BucketName:
+        default: Quick Start S3 bucket name
+      QSS3BucketRegion:
+        default: Quick Start S3 bucket Region
+      QSS3KeyPrefix:
+        default: Quick Start S3 key prefix
 Parameters:
   DirectoryServiceType:
     Type: String
     Description: AD Connector or Managed AD type of directory
-    Default: 'Managed AD'
+    Default: Managed AD
     AllowedValues:
-      - 'AD Connector'
-      - 'Managed AD'
+      - AD Connector
+      - Managed AD
   AdminArn:
     Type: String
     Description: IAM Amazon Resource Name that has administrator rights to the AWS KMS key. If you keep this box blank, KMS key policy will not have an administrator role to administer it.
     Default: ''
-
-  # CodeCommitS3Bucket:
-  #   Type: String
-  #   Description: S3 bucket name where the code for Duo AuthProxy is located
-  #   AllowedPattern: "^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$"
-  #   ConstraintDescription: "S3 Bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-)."
-    
-    
-  # CodeCommitS3BucketKey:
-  #   Type: String
-  #   Description: S3 bucket key location where the code for Duo AuthProxy
-  #   AllowedPattern: "^[0-9a-zA-Z-/.]*$"
-  #   ConstraintDescription: "S3 Bucket key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/)."
-    
   EcrRepoName:
     Type: String
     Description: Name of the Duo Authentication proxy ECR repo.
     Default: duo-authproxy
-    AllowedPattern: "(?:[a-z0-9]+(?:[._-][a-z0-9]+)*/)*[a-z0-9]+(?:[._-][a-z0-9]+)*"
+    AllowedPattern: (?:[a-z0-9]+(?:[._-][a-z0-9]+)*/)*[a-z0-9]+(?:[._-][a-z0-9]+)*
     MinLength: 2
     MaxLength: 256
   EcrImageRetention:
     Type: Number
     Description: Number of days to retain the ECR image.
-    ConstraintDescription: 'Must be in the range [30-600].'
+    ConstraintDescription: Must be in the range [30-600].
     Default: 30
     MinValue: 30
     MaxValue: 600
@@ -165,22 +133,21 @@ Parameters:
     Type: String
     Description: Name of the CodeCommit repo that which will manage all the code base.
     Default: duo-authproxy
-    AllowedPattern: "^[0-9a-zA-Z-/]*$"
-  CodeCommitBranchName: 
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+  CodeCommitBranchName:
     Type: String
     Description: Name of the CodeCommit branch where all the code base is located. This branch starts actions in CodePipeline.
     Default: ecr
-    AllowedPattern: "^[0-9a-zA-Z-/]*$"
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
   EcrCronExpression:
     Type: String
-    Description: Cron expression trigger. By default, it's set at 0000 UTC every Saturday. See https://docs.aws.amazon.com/eventbridge/latest/userguide/scheduled-events.html. 
-    Default: '0 0 ? * SAT *'
+    Description: Cron expression trigger. By default, it's set at 0000 UTC every Saturday. See https://docs.aws.amazon.com/eventbridge/latest/userguide/scheduled-events.html.
+    Default: 0 0 ? * SAT *
   NotificationEmail:
     Type: String
     Description: Email address of Duo administrators to notify when the pipeline fails or when an update to the directory fails.
-    AllowedPattern: '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+    AllowedPattern: ^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$
     ConstraintDescription: Provide a valid email address.
-
   AdSync:
     Type: String
     Description: If Active Directory synchronization is not required, choose "no."
@@ -188,61 +155,39 @@ Parameters:
     AllowedValues:
       - 'yes'
       - 'no'
-
   adReadOnlyUser:
     Type: String
-    Description: >
-      Name of Active Directory user with read-only access to the directory for Duo's Directory Sync configuration.
+    Description: "Name of Active Directory user with read-only access to the directory for Duo's Directory Sync configuration.\n"
     Default: ''
-
   adReadOnlyPassword:
     Type: String
     NoEcho: true
-    Description: >
-      Password for Active Directory user with read-only access to the directory for Duo's Directory Sync configuration.
-    Default:  ''
-  
+    Description: "Password for Active Directory user with read-only access to the directory for Duo's Directory Sync configuration.\n"
+    Default: ''
   DirectoryIntegrationKey:
     Type: String
-    Description: >
-      Integration key retrieved from Duo's Directory Sync configuration.
-    Default:  ''
-
+    Description: "Integration key retrieved from Duo's Directory Sync configuration.\n"
+    Default: ''
   DirectorySecretKey:
     Type: String
     NoEcho: true
-    Description: >
-      Secret key retrieved from Duo's Directory Sync configuration.
-    Default:  ''
-
+    Description: "Secret key retrieved from Duo's Directory Sync configuration.\n"
+    Default: ''
   DuoIntegrationKey:
     Type: String
-    Description: >
-      Integration key retrieved from the Duo RADIUS application configuration.
-    
-
+    Description: "Integration key retrieved from the Duo RADIUS application configuration.\n"
   DuoSecretKey:
     Type: String
     NoEcho: true
-    Description: >
-      Secret key retrieved from the Duo RADIUS application configuration.
-
+    Description: "Secret key retrieved from the Duo RADIUS application configuration.\n"
   DuoApiHostName:
     Type: String
-    Description: >
-      API hostname retrieved from the Duo RADIUS application configuration.
-#    AllowedPattern: ^api\-[a-zA-Z0-9]*.duofederal.com$
-#    ConstraintDescription: >
-#      API hostname must match pattern api-12345678.duosecurity.com
-
+    Description: "API hostname retrieved from the Duo RADIUS application configuration.\n"
   DirectoryServiceId:
     Type: String
-    Description: >
-      ID of existing Directory Service (d-xxxxxxxxxx).
+    Description: "ID of existing Directory Service (d-xxxxxxxxxx).\n"
     AllowedPattern: ^d\-[a-zA-Z0-9]{10,}$
-    ConstraintDescription: >
-      Directory Service ID must match the pattern d-0123456789.
-
+    ConstraintDescription: "Directory Service ID must match the pattern d-0123456789.\n"
   RadiusProxyServerCount:
     Type: Number
     Default: 2
@@ -251,33 +196,25 @@ Parameters:
       - 2
       - 3
       - 4
-    Description: >
-      Number of RADIUS proxy Fargate servers to create.
-
+    Description: "Number of RADIUS proxy Fargate servers to create.\n"
   RadiusPortNumber:
     Type: Number
-    Description: >
-      Port on which to listen for incoming RADIUS access requests.
+    Description: "Port on which to listen for incoming RADIUS access requests.\n"
     Default: 1812
-    ConstraintDescription: 'Must be in the range [1150-65535].'
+    ConstraintDescription: Must be in the range [1150-65535].
     MinValue: 1150
     MaxValue: 65535
-
   DuoFailMode:
     Type: String
-    Description: >
-      After primary authentication succeeds, safe mode allows authentication attempts
-      if the Duo service cannot be contacted. Secure mode rejects authentication attempts
-      if the Duo service cannot be contacted.
+    Description: "After primary authentication succeeds, safe mode allows authentication attempts if the Duo service cannot be contacted. Secure mode rejects authentication attempts if the Duo service cannot\
+      \ be contacted.\n"
     AllowedValues:
-      - "safe"
-      - "secure"
-    Default: "safe"
-
+      - safe
+      - secure
+    Default: safe
   DuoMaxCapacity:
     Type: String
-    Description: >
-      Maximum number of tasks that can be launched by ECS Application Auto Scaling.
+    Description: "Maximum number of tasks that can be launched by ECS Application Auto Scaling.\n"
     Default: 4
     AllowedValues:
       - 4
@@ -285,77 +222,54 @@ Parameters:
       - 6
       - 7
       - 8
-      - 9 
+      - 9
       - 10
   QSS3BucketName:
     AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
-    ConstraintDescription: The Quick Start bucket name can include numbers, lowercase
-      letters, uppercase letters, and hyphens (-). It cannot start or end with a 
-      hyphen (-).
+    ConstraintDescription: The Quick Start bucket name can include numbers, lowercase letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen (-).
     Default: aws-ia-us-east-1
-    Description: Name of the S3 bucket for your copy of the Quick Start assets. 
-      Keep the default name unless you are customizing the template. 
-      Changing the name updates code references to point to a new Quick 
-      Start location. This name can include numbers, lowercase letters, 
-      uppercase letters, and hyphens, but do not start or end with a hyphen (-). 
-      See https://aws-quickstart.github.io/option1.html.
+    Description: Name of the S3 bucket for your copy of the Quick Start assets. Keep the default name unless you are customizing the template. Changing the name updates code references to point to a new
+      Quick Start location. This name can include numbers, lowercase letters, uppercase letters, and hyphens, but do not start or end with a hyphen (-). See https://aws-quickstart.github.io/option1.html.
     Type: String
   QSS3BucketRegion:
-    Default: 'us-east-1'
-    Description: 'AWS Region where the Quick Start S3 bucket (QSS3BucketName) is 
-    hosted. Keep the default Region unless you are customizing the template. 
-    Changing this Region updates code references to point to a new Quick Start location. 
-    When using your own bucket, specify the Region. 
-    See https://aws-quickstart.github.io/option1.html.'
+    Default: us-east-1
+    Description: AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. Keep the default Region unless you are customizing the template. Changing this Region updates code references to point
+      to a new Quick Start location. When using your own bucket, specify the Region. See https://aws-quickstart.github.io/option1.html.
     Type: String
   QSS3KeyPrefix:
     AllowedPattern: ^[0-9a-zA-Z-/]*$
-    ConstraintDescription: The Quick Start S3 key prefix can include numbers, lowercase letters,
-      uppercase letters, hyphens (-), and forward slashes (/). The prefix should
-      end with a forward slash (/).
+    ConstraintDescription: The Quick Start S3 key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). The prefix should end with a forward slash (/).
     Default: cfn-ps-duo-mfa/
-    Description: S3 key prefix that is used to simulate a directory for your copy of the 
-      Quick Start assets. Keep the default prefix unless you are customizing 
-      the template. Changing this prefix updates code references to point to 
-      a new Quick Start location. This prefix can include numbers, lowercase 
-      letters, uppercase letters, hyphens (-), and forward slashes (/). End with 
-      a forward slash. See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html 
+    Description: S3 key prefix that is used to simulate a directory for your copy of the Quick Start assets. Keep the default prefix unless you are customizing the template. Changing this prefix updates
+      code references to point to a new Quick Start location. This prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slashes (/). End with a forward slash. See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html
       and https://aws-quickstart.github.io/option1.html.
     Type: String
-#-----------------------------------------------------------
-# Conditions
-#-----------------------------------------------------------
 Conditions:
-  NoKmsAdmin: !Equals
-    - !Ref AdminArn
-    - ''
-  ManagedAdEgressRule: !Equals 
-    - !Ref DirectoryServiceType
-    - 'Managed AD'
-
-#-----------------------------------------------------------
-# Resources
-#-----------------------------------------------------------
-
+  NoKmsAdmin:
+    Fn::Equals:
+      - Ref: AdminArn
+      - ''
+  ManagedAdEgressRule:
+    Fn::Equals:
+      - Ref: DirectoryServiceType
+      - Managed AD
 Resources:
-  #--------------------------------------------------
-  # IAM role used by the bootstrapping Lambda function
-  # to retrieve the ID of the directory service.
-  #--------------------------------------------------
   GetDirectoryServiceMfaSettingsRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !Sub GetDirectoryServiceMfaSettingsRole-${DirectoryServiceId}
+      RoleName:
+        Fn::Sub: GetDirectoryServiceMfaSettingsRole-${DirectoryServiceId}
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
-              Service: [lambda.amazonaws.com]
+              Service:
+                - lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-        - !Ref DuoKmsIamPolicy
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Ref: DuoKmsIamPolicy
       Policies:
         - PolicyName: DescribeDirectoryServices
           PolicyDocument:
@@ -364,150 +278,97 @@ Resources:
               - Effect: Allow
                 Action:
                   - ds:DescribeDirectories
-                Resource: "*"
-
-  #--------------------------------------------------
-  # This custom Lambda function will retrieve the
-  # details of the directory service.
-  #--------------------------------------------------
+                Resource: '*'
   GetDirectoryServiceFunction:
     Type: AWS::Lambda::Function
     Properties:
       Description: Look up Directory Service
       Handler: index.lambda_handler
-      KmsKeyArn: !GetAtt DuoKmsKey.Arn
-      Role: !GetAtt GetDirectoryServiceMfaSettingsRole.Arn
+      KmsKeyArn:
+        Fn::GetAtt:
+          - DuoKmsKey
+          - Arn
+      Role:
+        Fn::GetAtt:
+          - GetDirectoryServiceMfaSettingsRole
+          - Arn
       Runtime: python3.7
       Timeout: 60
       Tags:
-      - Key: duo:DirectoryServiceId
-        Value: !Ref DirectoryServiceId
+        - Key: duo:DirectoryServiceId
+          Value:
+            Ref: DirectoryServiceId
       Code:
-        ZipFile: |
-          import boto3
-          import json
-          import cfnresponse
-          def lambda_handler(event, context):
-            print (json.dumps(event))
-            if 'RequestType' in event and 'Delete' in event['RequestType']:
-              cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, '')
-            elif (event['RequestType'] == 'Create') or (event['RequestType'] == 'Update'):
-              print(event['RequestType'] + ' event proceeding to get ips')
-              try:
-                directory_id = event['ResourceProperties']['directory_id']
-                directories = boto3.client('ds').describe_directories(DirectoryIds = [directory_id])['DirectoryDescriptions']
-                directory = directories[0]
-                network = ''
-                if directory['Type'] == 'ADConnector': 
-                  network = 'ConnectSettings'
-                  ips = directory['ConnectSettings']['ConnectIps']
-                elif directory['Type'] == 'MicrosoftAD': 
-                  network = 'VpcSettings'
-                  ips = directory['DnsIpAddrs']
-              
-                responseData = {}
-                responseData['VpcId'] = directory[network]['VpcId']
-                responseData['SecurityGroupId'] = directory[network]['SecurityGroupId']
-                responseData['SubnetId1'] = directory[network]['SubnetIds'][0]
-                responseData['SubnetId2'] = directory[network]['SubnetIds'][1]
-                responseData['DsIp1'] = ips[0]
-                responseData['DsIp2'] = ips[1]
-                # print(reponseData)
-                cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, '')
-              except Exception as e:
-                print(e) 
-                cfnresponse.send(event, context, cfnresponse.FAILED, responseData, '')
-
-  #--------------------------------------------------
-  # CloudFormation uses this custom resource to invoke
-  # the Lambda function to look up the ID of the
-  # directory service.
-  #------------------------------------------------
+        ZipFile: "import boto3\nimport json\nimport cfnresponse\ndef lambda_handler(event, context):\n  print (json.dumps(event))\n  if 'RequestType' in event and 'Delete' in event['RequestType']:\n   \
+          \ cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, '')\n  elif (event['RequestType'] == 'Create') or (event['RequestType'] == 'Update'):\n    print(event['RequestType'] + ' event proceeding\
+          \ to get ips')\n    try:\n      directory_id = event['ResourceProperties']['directory_id']\n      directories = boto3.client('ds').describe_directories(DirectoryIds = [directory_id])['DirectoryDescriptions']\n\
+          \      directory = directories[0]\n      network = ''\n      if directory['Type'] == 'ADConnector': \n        network = 'ConnectSettings'\n        ips = directory['ConnectSettings']['ConnectIps']\n\
+          \      elif directory['Type'] == 'MicrosoftAD': \n        network = 'VpcSettings'\n        ips = directory['DnsIpAddrs']\n    \n      responseData = {}\n      responseData['VpcId'] = directory[network]['VpcId']\n\
+          \      responseData['SecurityGroupId'] = directory[network]['SecurityGroupId']\n      responseData['SubnetId1'] = directory[network]['SubnetIds'][0]\n      responseData['SubnetId2'] = directory[network]['SubnetIds'][1]\n\
+          \      responseData['DsIp1'] = ips[0]\n      responseData['DsIp2'] = ips[1]\n      # print(reponseData)\n      cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, '')\n    except\
+          \ Exception as e:\n      print(e) \n      cfnresponse.send(event, context, cfnresponse.FAILED, responseData, '')\n"
   GetDirectoryServiceDetails:
     Type: Custom::GetDirectoryService
     Properties:
-      ServiceToken: !GetAtt GetDirectoryServiceFunction.Arn
-      directory_id: !Ref DirectoryServiceId
+      ServiceToken:
+        Fn::GetAtt:
+          - GetDirectoryServiceFunction
+          - Arn
+      directory_id:
+        Ref: DirectoryServiceId
       toggler: '2'
-
-  #------------------------------------------------
-  # Stores the Duo configuration data as a Secrets
-  # Manager secret value and schedules periodic
-  # shares secret rotation.
-  #------------------------------------------------
   DuoConfigurationSettingsSecret:
     Type: AWS::SecretsManager::Secret
     Properties:
-      Name: !Sub DuoConfigurationSettings-${DirectoryServiceId}
+      Name:
+        Fn::Sub: DuoConfigurationSettings-${DirectoryServiceId}
       Description: Duo configuration settings
-      KmsKeyId: !GetAtt DuoKmsKey.Arn
+      KmsKeyId:
+        Fn::GetAtt:
+          - DuoKmsKey
+          - Arn
       GenerateSecretString:
-        SecretStringTemplate: !Sub |
-          {
-            "DuoSecretKey":"${DuoSecretKey}",
-            "DuoIntegrationKey":"${DuoIntegrationKey}",
-            "DuoApiHostName":"${DuoApiHostName}",
-            "DirectoryIntegrationKey":"${DirectoryIntegrationKey}",
-            "DirectorySecretKey":"${DirectorySecretKey}",
-            "adReadOnlyUser":"${adReadOnlyUser}",
-            "adReadOnlyPassword":"${adReadOnlyPassword}"
-          }
+        SecretStringTemplate:
+          Fn::Sub: "{\n  \"DuoSecretKey\":\"${DuoSecretKey}\",\n  \"DuoIntegrationKey\":\"${DuoIntegrationKey}\",\n  \"DuoApiHostName\":\"${DuoApiHostName}\",\n  \"DirectoryIntegrationKey\":\"${DirectoryIntegrationKey}\"\
+            ,\n  \"DirectorySecretKey\":\"${DirectorySecretKey}\",\n  \"adReadOnlyUser\":\"${adReadOnlyUser}\",\n  \"adReadOnlyPassword\":\"${adReadOnlyPassword}\"\n}\n"
         GenerateStringKey: RadiusSharedSecret
         PasswordLength: 25
-        # Do not include the following characters.
         ExcludeCharacters: '"=,'
       Tags:
-      - Key: duo:DirectoryServiceId
-        Value: !Ref DirectoryServiceId
-
-  #------------------------------------------------
-  # Automatically rotate Secrets Manager secret 
-  # every 7 days
-  #------------------------------------------------
+        - Key: duo:DirectoryServiceId
+          Value:
+            Ref: DirectoryServiceId
   DuoConfigurationSettingsSecretRotationSchedule:
     Type: AWS::SecretsManager::RotationSchedule
     DependsOn: DuoConfigurationSettingsSecretRotationLambdaInvokePermission
     Properties:
-      SecretId: !Ref DuoConfigurationSettingsSecret
-      RotationLambdaARN: !GetAtt RotateRadiusSharedSecretFunction.Arn
+      SecretId:
+        Ref: DuoConfigurationSettingsSecret
+      RotationLambdaARN:
+        Fn::GetAtt:
+          - RotateRadiusSharedSecretFunction
+          - Arn
       RotationRules:
         AutomaticallyAfterDays: 7
-
-  #------------------------------------------------
-  # Allow Lambda to rotate secrets 
-  #------------------------------------------------
   DuoConfigurationSettingsSecretRotationLambdaInvokePermission:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: !Ref RotateRadiusSharedSecretFunction
+      FunctionName:
+        Ref: RotateRadiusSharedSecretFunction
       Action: lambda:InvokeFunction
       Principal: secretsmanager.amazonaws.com
-
-  #-------------------------------------------------
-  # Create the CloudWatch Log resource for logging
-  # by the Duo RADIUS service
-  #-------------------------------------------------
   RadiusProxyCloudWatchLogsGroup:
     Type: AWS::Logs::LogGroup
     Properties:
-      LogGroupName: !Sub RadiusProxyLogs-${DirectoryServiceId}/authproxy.log
+      LogGroupName:
+        Fn::Sub: RadiusProxyLogs-${DirectoryServiceId}/authproxy.log
       RetentionInDays: 30
-
-  #-------------------------------------------------
-  # Create the Elastic Container Service Fargate
-  # Cluster used by the Duo RADIUS service
-  #-------------------------------------------------
   DuoCluster:
     Type: AWS::ECS::Cluster
     Properties:
       ClusterSettings:
         - Name: containerInsights
           Value: enabled
-
-  #-------------------------------------------------
-  # Create the Elastic Container Service Fargate
-  # Task Definition used by the Duo RADIUS service
-  #-------------------------------------------------
   DuoTaskDefinition:
     DependsOn: DuoSnsCustomResource
     Type: AWS::ECS::TaskDefinition
@@ -517,47 +378,61 @@ Resources:
         - FARGATE
       Cpu: '1024'
       Memory: 2GB
-      Family: !Sub '${AWS::StackName}'
-      ExecutionRoleArn: !GetAtt DuoTaskRoleArn.Arn
-      TaskRoleArn: !GetAtt DuoTaskRoleArn.Arn
+      Family:
+        Fn::Sub: ${AWS::StackName}
+      ExecutionRoleArn:
+        Fn::GetAtt:
+          - DuoTaskRoleArn
+          - Arn
+      TaskRoleArn:
+        Fn::GetAtt:
+          - DuoTaskRoleArn
+          - Arn
       ContainerDefinitions:
         - Name: DuoAuthProxy
-          Image: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepoName}'
+          Image:
+            Fn::Sub: ${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${EcrRepoName}
           PortMappings:
-            - ContainerPort: !Ref RadiusPortNumber
-              HostPort: !Ref RadiusPortNumber
+            - ContainerPort:
+                Ref: RadiusPortNumber
+              HostPort:
+                Ref: RadiusPortNumber
               Protocol: udp
             - ContainerPort: 80
               HostPort: 80
               Protocol: tcp
-          # Set plain text environment variables for the container
           Environment:
             - Name: DIRECTORY_IP1
-              Value: !GetAtt GetDirectoryServiceDetails.DsIp1
+              Value:
+                Fn::GetAtt:
+                  - GetDirectoryServiceDetails
+                  - DsIp1
             - Name: DIRECTORY_IP2
-              Value: !GetAtt GetDirectoryServiceDetails.DsIp2
+              Value:
+                Fn::GetAtt:
+                  - GetDirectoryServiceDetails
+                  - DsIp2
             - Name: DUO_FAIL_MODE
-              Value: !Ref DuoFailMode
+              Value:
+                Ref: DuoFailMode
             - Name: RADIUS_PORT_NUMBER
-              Value: !Ref RadiusPortNumber
+              Value:
+                Ref: RadiusPortNumber
             - Name: AD_SYNC
-              Value: !Ref AdSync
-            
-          # Set secret environment variable for the container
+              Value:
+                Ref: AdSync
           Secrets:
             - Name: DuoSecret
-              ValueFrom: !Ref DuoConfigurationSettingsSecret
+              ValueFrom:
+                Ref: DuoConfigurationSettingsSecret
           LogConfiguration:
             LogDriver: awslogs
             Options:
-              awslogs-region: !Ref AWS::Region
-              awslogs-group: !Ref RadiusProxyCloudWatchLogsGroup
+              awslogs-region:
+                Ref: AWS::Region
+              awslogs-group:
+                Ref: RadiusProxyCloudWatchLogsGroup
               awslogs-stream-prefix: ecs
-
-  #-------------------------------------------------
-  # Create the Elastic Container Service Fargate
-  # IAM role used by the Duo RADIUS tasks
-  #-------------------------------------------------
   DuoTaskRoleArn:
     Type: AWS::IAM::Role
     Properties:
@@ -566,144 +441,141 @@ Resources:
           - Effect: Allow
             Principal:
               Service: ecs-tasks.amazonaws.com
-            Action: 'sts:AssumeRole'
+            Action: sts:AssumeRole
       ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy'
-        - !Ref DuoKmsIamPolicy
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+        - Ref: DuoKmsIamPolicy
       Policies:
-      - PolicyName: GetSecrets
-        PolicyDocument:
-          Version: 2012-10-17
-          Statement:
-            - Effect: Allow
-              Action:
-                - secretsmanager:GetSecretValue
-              Resource: !Ref DuoConfigurationSettingsSecret
-
-  #-------------------------------------------------
-  # Create the Elastic Container Service Fargate
-  # Service used by the Duo RADIUS 
-  #-------------------------------------------------
+        - PolicyName: GetSecrets
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action:
+                  - secretsmanager:GetSecretValue
+                Resource:
+                  Ref: DuoConfigurationSettingsSecret
   DuoService:
     Type: AWS::ECS::Service
-    Properties: 
-      Cluster: !Ref DuoCluster
+    Properties:
+      Cluster:
+        Ref: DuoCluster
       DeploymentConfiguration:
         MaximumPercent: 400
         MinimumHealthyPercent: 100
-      DesiredCount: !Ref RadiusProxyServerCount
+      DesiredCount:
+        Ref: RadiusProxyServerCount
       LaunchType: FARGATE
-      NetworkConfiguration: 
-        AwsvpcConfiguration: 
-          SecurityGroups: 
-            - !Ref DuoServiceSg
-          Subnets: 
-            - !GetAtt GetDirectoryServiceDetails.SubnetId1
-            - !GetAtt GetDirectoryServiceDetails.SubnetId2
-      TaskDefinition: !Ref DuoTaskDefinition
-
-  #-------------------------------------------------
-  # Create the Security Group used by Fargate
-  # for Duo ECS tasks
-  #-------------------------------------------------
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          SecurityGroups:
+            - Ref: DuoServiceSg
+          Subnets:
+            - Fn::GetAtt:
+                - GetDirectoryServiceDetails
+                - SubnetId1
+            - Fn::GetAtt:
+                - GetDirectoryServiceDetails
+                - SubnetId2
+      TaskDefinition:
+        Ref: DuoTaskDefinition
   DuoServiceSg:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      # GroupName: Duo_RADIUS_proxies
       GroupDescription: Duo RADIUS proxies
-      VpcId: !GetAtt GetDirectoryServiceDetails.VpcId
+      VpcId:
+        Fn::GetAtt:
+          - GetDirectoryServiceDetails
+          - VpcId
       SecurityGroupIngress:
-      - IpProtocol: udp
-        FromPort: !Ref RadiusPortNumber
-        ToPort: !Ref RadiusPortNumber
-        SourceSecurityGroupId: !GetAtt GetDirectoryServiceDetails.SecurityGroupId
-        Description: Allows UDP from Directory Service domain controllers
+        - IpProtocol: udp
+          FromPort:
+            Ref: RadiusPortNumber
+          ToPort:
+            Ref: RadiusPortNumber
+          SourceSecurityGroupId:
+            Fn::GetAtt:
+              - GetDirectoryServiceDetails
+              - SecurityGroupId
+          Description: Allows UDP from Directory Service domain controllers
       SecurityGroupEgress:
-      - IpProtocol: "-1"
-        FromPort: 0
-        ToPort: 65535
-        CidrIp: 0.0.0.0/0
-        Description: Allow all outbound traffic
-
-  #-------------------------------------------------
-  # Create the Security Group Egress used by Directory
-  # to talk back to Duo ECS service for Managed AD
-  #-------------------------------------------------
+        - IpProtocol: '-1'
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic
   DirectoryEgressRule:
     Type: AWS::EC2::SecurityGroupEgress
     Condition: ManagedAdEgressRule
     Properties:
       IpProtocol: udp
-      FromPort: !Ref RadiusPortNumber
-      ToPort: !Ref RadiusPortNumber
-      DestinationSecurityGroupId: !GetAtt DuoServiceSg.GroupId
-      GroupId: !GetAtt GetDirectoryServiceDetails.SecurityGroupId
-
-  #-------------------------------------------------
-  # Create the CloudWatch Event Rule for 
-  # Duo ECS Service
-  #-------------------------------------------------
+      FromPort:
+        Ref: RadiusPortNumber
+      ToPort:
+        Ref: RadiusPortNumber
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - DuoServiceSg
+          - GroupId
+      GroupId:
+        Fn::GetAtt:
+          - GetDirectoryServiceDetails
+          - SecurityGroupId
   DuoServiceEvents:
     Type: AWS::Events::Rule
     Properties:
-      Description: "EventRule"
-      EventPattern: 
-        source: 
-          - "aws.ecs"
-        detail-type: 
-          - "ECS Service Action"
-        detail: 
-          clusterArn: 
-            - !GetAtt DuoCluster.Arn
-      State: "ENABLED"
-      Targets: 
-        - 
-          Arn: !GetAtt ProcessDuoServiceFunction.Arn
-          Id: "TargetFunctionV1"
-
-  #-------------------------------------------------
-  # Allow the CloudWatch Event Rule for 
-  # Duo ECS Service to trigger Lambda
-  #-------------------------------------------------
-  PermissionForEventsToInvokeLambda: 
+      Description: EventRule
+      EventPattern:
+        source:
+          - aws.ecs
+        detail-type:
+          - ECS Service Action
+        detail:
+          clusterArn:
+            - Fn::GetAtt:
+                - DuoCluster
+                - Arn
+      State: ENABLED
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - ProcessDuoServiceFunction
+              - Arn
+          Id: TargetFunctionV1
+  PermissionForEventsToInvokeLambda:
     Type: AWS::Lambda::Permission
-    Properties: 
-      FunctionName: !Ref ProcessDuoServiceFunction
-      Action: "lambda:InvokeFunction"
-      Principal: "events.amazonaws.com"
-      SourceArn: !GetAtt DuoServiceEvents.Arn
-
-  #-------------------------------------------------
-  # Create an empty Systems Manager Parameter 
-  # for Duo ECS tasks IP adresses
-  #-------------------------------------------------
+    Properties:
+      FunctionName:
+        Ref: ProcessDuoServiceFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn:
+        Fn::GetAtt:
+          - DuoServiceEvents
+          - Arn
   DuoServiceIps:
     Type: AWS::SSM::Parameter
     Properties:
       Type: String
       Value: default
-
-  #-------------------------------------------------
-  # Create an IAM role for processing events from
-  # Duo ECS Service
-  #-------------------------------------------------
   ProcessDuoServiceEventsRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
-              Service: [lambda.amazonaws.com]
+              Service:
+                - lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-        - !Ref DuoKmsIamPolicy
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Ref: DuoKmsIamPolicy
       Policies:
         - PolicyName: DuoEcsServiceDetails
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: '2012-10-17'
             Statement:
               - Effect: Allow
                 Action:
@@ -714,122 +586,109 @@ Resources:
                 Action:
                   - ssm:PutParameter
                   - ssm:GetParameter*
-                Resource: !Sub 'arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${DuoServiceIps}'
-
-  #--------------------------------------------------
-  # This custom Lambda function will processing events 
-  # from Duo ECS Service
-  #--------------------------------------------------
+                Resource:
+                  Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${DuoServiceIps}
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyWildcardResource
+            - EIAMPolicyActionWildcard
+          ignore_reasons:
+            - EIAMPolicyWildcardResource: Intent assumed for initial migration.
+            - EIAMPolicyActionWildcard: Intent assumed for initial migration.
   ProcessDuoServiceFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Description: |
-        Rotates RADIUS shared secret and updates running instances and directory
+      Description: "Rotates RADIUS shared secret and updates running instances and directory\n"
       Handler: index.lambda_handler
-      KmsKeyArn: !GetAtt DuoKmsKey.Arn
-      Role: !GetAtt ProcessDuoServiceEventsRole.Arn
+      KmsKeyArn:
+        Fn::GetAtt:
+          - DuoKmsKey
+          - Arn
+      Role:
+        Fn::GetAtt:
+          - ProcessDuoServiceEventsRole
+          - Arn
       Runtime: python3.7
       Timeout: 900
       Environment:
         Variables:
-          DuoService: !Ref DuoService
-          DuoCluster: !GetAtt DuoCluster.Arn
-          DuoSsm: !Ref DuoServiceIps
+          DuoService:
+            Ref: DuoService
+          DuoCluster:
+            Fn::GetAtt:
+              - DuoCluster
+              - Arn
+          DuoSsm:
+            Ref: DuoServiceIps
       Tags:
-      - Key: duo:DirectoryServiceId
-        Value: !Ref DirectoryServiceId
+        - Key: duo:DirectoryServiceId
+          Value:
+            Ref: DirectoryServiceId
       Code:
-        ZipFile: |
-          import boto3
-          import os
-          import json
-
-          ecs = boto3.client('ecs')
-          ssm = boto3.client('ssm')
-
-          os_srv = os.environ['DuoService']
-          os_cluster = os.environ['DuoCluster']
-
-          def lambda_handler(event, context):
-            duo_cluster = event['detail']['clusterArn']
-            duo_service = event['resources'][0]
-            old_ips = ssm.get_parameter(Name=os.environ['DuoSsm'])['Parameter']['Value']
-            if os_srv == duo_service:
-              if os_cluster == duo_cluster:
-                print('Cluster and service names match')
-                r = ecs.list_tasks(cluster=duo_cluster, serviceName=duo_service, desiredStatus='RUNNING', launchType='FARGATE')
-                s = ecs.describe_tasks(cluster=duo_cluster,tasks=r['taskArns'])
-
-                ip=[]
-                for task in s['tasks']:
-                  for con in task['containers']:
-                    for net in con['networkInterfaces']:
-                      ip.append(net['privateIpv4Address'])
-                      print('Task IP: '+ net['privateIpv4Address'])
-                ip_string = ','.join([str(elem) for elem in ip])
-                if old_ips == ip_string:
-                  print('There has been no change in the IP address. No action will be taken')
-                else: 
-                  print('Fargate task IP addresses have changed.')
-                  ssm.put_parameter(Name=os.environ['DuoSsm'],Value=ip_string,Type='String',Overwrite=True)
-
-              else:
-                print('Cluster name does not match. Given: ' + os_cluster + ' observed: ' + duo_cluster)
-            else: 
-              print('Service names do not match. Given: ' + os_srv + ' observed: ' + duo_service)
-
-  #--------------------------------------------------
-  # Create an IAM role for 
-  # Radius Shared Secret Rotation
-  #--------------------------------------------------
+        ZipFile: "import boto3\nimport os\nimport json\n\necs = boto3.client('ecs')\n ssm = boto3.client('ssm')\n\nos_srv = os.environ['DuoService']\nos_cluster = os.environ['DuoCluster']\n\ndef lambda_handler(event,\
+          \ context):\n  duo_cluster = event['detail']['clusterArn']\n  duo_service = event['resources'][0]\n  old_ips = ssm.get_parameter(Name=os.environ['DuoSsm'])['Parameter']['Value']\n  if os_srv ==\
+          \ duo_service:\n    if os_cluster == duo_cluster:\n      print('Cluster and service names match')\n      r = ecs.list_tasks(cluster=duo_cluster, serviceName=duo_service, desiredStatus='RUNNING',\
+          \ launchType='FARGATE')\n      s = ecs.describe_tasks(cluster=duo_cluster,tasks=r['taskArns'])\n\n      ip=[]\n      for task in s['tasks']:\n        for con in task['containers']:\n         \
+          \ for net in con['networkInterfaces']:\n            ip.append(net['privateIpv4Address'])\n            print('Task IP: '+ net['privateIpv4Address'])\n      ip_string = ','.join([str(elem) for elem\
+          \ in ip])\n      if old_ips == ip_string:\n        print('There has been no change in the IP address. No action will be taken')\n      else: \n        print('Fargate task IP addresses have changed.')\n\
+          \        ssm.put_parameter(Name=os.environ['DuoSsm'],Value=ip_string,Type='String',Overwrite=True)\n\n    else:\n      print('Cluster name does not match. Given: ' + os_cluster + ' observed: '\
+          \ + duo_cluster)\n  else: \n    print('Service names do not match. Given: ' + os_srv + ' observed: ' + duo_service)\n"
   RadiusSharedSecretRotationRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
-              Service: [lambda.amazonaws.com]
+              Service:
+                - lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-        - !Ref DuoKmsIamPolicy
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Ref: DuoKmsIamPolicy
       Policies:
         - PolicyName: RotateDuoConfigurationSettingsSecret
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: '2012-10-17'
             Statement:
               - Effect: Allow
                 Action:
                   - ecs:UpdateService
-                Resource: !Sub 
-                          - 'arn:${AWS::Partition}:ecs:${AWS::Region}:${AWS::AccountId}:service/${DuoCluster}/${DuoServiceName}'
-                          - DuoServiceName: !GetAtt DuoService.Name
+                Resource:
+                  Fn::Sub:
+                    - arn:${AWS::Partition}:ecs:${AWS::Region}:${AWS::AccountId}:service/${DuoCluster}/${DuoServiceName}
+                    - DuoServiceName:
+                        Fn::GetAtt:
+                          - DuoService
+                          - Name
               - Effect: Allow
                 Action:
                   - secretsmanager:DescribeSecret
                   - secretsmanager:GetSecretValue
                   - secretsmanager:PutSecretValue
                   - secretsmanager:UpdateSecretVersionStage
-                Resource: !Ref DuoConfigurationSettingsSecret
+                Resource:
+                  Ref: DuoConfigurationSettingsSecret
               - Effect: Allow
                 Action:
                   - secretsmanager:GetRandomPassword
-                Resource: "*"
-
-  #--------------------------------------------------
-  # This custom Lambda function will rotate the
-  # radius shared secret
-  #--------------------------------------------------
+                Resource: '*'
   RotateRadiusSharedSecretFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Description: |
-        Rotates RADIUS shared secret and updates running instances and directory
+      Description: "Rotates RADIUS shared secret and updates running instances and directory\n"
       Handler: index.lambda_handler
-      KmsKeyArn: !GetAtt DuoKmsKey.Arn
-      Role: !GetAtt RadiusSharedSecretRotationRole.Arn
+      KmsKeyArn:
+        Fn::GetAtt:
+          - DuoKmsKey
+          - Arn
+      Role:
+        Fn::GetAtt:
+          - RadiusSharedSecretRotationRole
+          - Arn
       Runtime: python3.7
       Timeout: 900
       Environment:
@@ -837,119 +696,74 @@ Resources:
           PasswordLength: 25
           ExcludeCharacters: '"=,'
           RunDocumentTagName: tag:duo:DirectoryServiceId
-          RunDocumentTagValue: !Ref DirectoryServiceId
-          # func_arn: !GetAtt UpdateDirectoryServiceMfaSettings.Arn
-          DuoService: !GetAtt DuoService.Name
-          DuoCluster: !Ref DuoCluster
+          RunDocumentTagValue:
+            Ref: DirectoryServiceId
+          DuoService:
+            Fn::GetAtt:
+              - DuoService
+              - Name
+          DuoCluster:
+            Ref: DuoCluster
       Tags:
-      - Key: duo:DirectoryServiceId
-        Value: !Ref DirectoryServiceId
+        - Key: duo:DirectoryServiceId
+          Value:
+            Ref: DirectoryServiceId
       Code:
-        ZipFile: |
-          import boto3
-          import os
-          import json
-          import time
-
-          secretsmanager_client = boto3.client('secretsmanager')
-          ssm_client = boto3.client('ssm')
-          lambda_client = boto3.client('lambda')
-          ecs = boto3.client('ecs')
-          srv = os.environ['DuoService']
-          duo_cluster = os.environ['DuoCluster']
-          # func = os.environ['func_arn']
-          def lambda_handler(event, context):
-              arn = event['SecretId']
-              token = event['ClientRequestToken']
-              step = event['Step']
-
-              if step == "createSecret":
-                  create_secret(secretsmanager_client, arn, token)
-
-              elif step == "finishSecret":
-                  finish_secret(secretsmanager_client, arn, token)
-                  
-              ecs.update_service(cluster=duo_cluster,service=srv, forceNewDeployment=True)
-
-          def create_secret(secretsmanager_client, arn, token):
-              # Get the secret
-              secret = json.loads(secretsmanager_client.get_secret_value(SecretId=arn, VersionStage="AWSCURRENT")['SecretString'])
-
-              # Generate a random password
-              r = secretsmanager_client.get_random_password(PasswordLength=int(os.environ['PasswordLength']),ExcludeCharacters=os.environ['ExcludeCharacters'])
-              secret['RadiusSharedSecret'] = r['RandomPassword']
-
-              # Put the secret
-              secretsmanager_client.put_secret_value(SecretId=arn, ClientRequestToken=token, SecretString=json.dumps(secret), VersionStages=['AWSPENDING'])
-              print("createSecret: Successfully put secret for ARN %s and version %s." % (arn, token))
-
-
-          def finish_secret(secretsmanager_client, arn, token):
-              # First describe the secret to get the current version
-              metadata = secretsmanager_client.describe_secret(SecretId=arn)
-              current_version = None
-              for version in metadata["VersionIdsToStages"]:
-                  if "AWSCURRENT" in metadata["VersionIdsToStages"][version]:
-                      if version == token:
-                          print("finishSecret: Version %s already marked as AWSCURRENT for %s" % (version, arn))
-                          return
-                      current_version = version
-                      break
-
-              # Finalize by staging the secret version current
-              secretsmanager_client.update_secret_version_stage(SecretId=arn, VersionStage="AWSCURRENT", MoveToVersionId=token, RemoveFromVersionId=current_version)
-              print("finishSecret: Successfully set AWSCURRENT stage to version %s for secret %s." % (version, arn))
-
-  #--------------------------------------------------
-  # Create CloudWatch Event Rule to trigger when 
-  # System Manager Parameter changes
-  #--------------------------------------------------
+        ZipFile: "import boto3\nimport os\nimport json\nimport time\n\nsecretsmanager_client = boto3.client('secretsmanager')\nssm_client = boto3.client('ssm')\nlambda_client = boto3.client('lambda')\n\
+          ecs = boto3.client('ecs')\nsrv = os.environ['DuoService']\n duo_cluster = os.environ['DuoCluster']\n# func = os.environ['func_arn']\n def lambda_handler(event, context):\n    arn = event['SecretId']\n\
+          \    token = event['ClientRequestToken']\n    step = event['Step']\n\n    if step == \"createSecret\":\n        create_secret(secretsmanager_client, arn, token)\n\n    elif step == \"finishSecret\"\
+          :\n        finish_secret(secretsmanager_client, arn, token)\n        \n    ecs.update_service(cluster=duo_cluster,service=srv, forceNewDeployment=True)\n\ndef create_secret(secretsmanager_client,\
+          \ arn, token):\n    # Get the secret\n    secret = json.loads(secretsmanager_client.get_secret_value(SecretId=arn, VersionStage=\"AWSCURRENT\")['SecretString'])\n\n    # Generate a random password\n\
+          \    r = secretsmanager_client.get_random_password(PasswordLength=int(os.environ['PasswordLength']),ExcludeCharacters=os.environ['ExcludeCharacters'])\n    secret['RadiusSharedSecret'] = r['RandomPassword']\n\
+          \n    # Put the secret\n    secretsmanager_client.put_secret_value(SecretId=arn, ClientRequestToken=token, SecretString=json.dumps(secret), VersionStages=['AWSPENDING'])\n    print(\"createSecret:\
+          \ Successfully put secret for ARN %s and version %s.\" % (arn, token))\n\n\ndef finish_secret(secretsmanager_client, arn, token):\n    # First describe the secret to get the current version\n\
+          \    metadata = secretsmanager_client.describe_secret(SecretId=arn)\n    current_version = None\n    for version in metadata[\"VersionIdsToStages\"]:\n        if \"AWSCURRENT\" in metadata[\"\
+          VersionIdsToStages\"][version]:\n            if version == token:\n                print(\"finishSecret: Version %s already marked as AWSCURRENT for %s\" % (version, arn))\n                return\n\
+          \            current_version = version\n            break\n\n    # Finalize by staging the secret version current\n    secretsmanager_client.update_secret_version_stage(SecretId=arn, VersionStage=\"\
+          AWSCURRENT\", MoveToVersionId=token, RemoveFromVersionId=current_version)\n    print(\"finishSecret: Successfully set AWSCURRENT stage to version %s for secret %s.\" % (version, arn))\n"
   UpdateDirectoryServiceEvent:
     Type: AWS::Events::Rule
     Properties:
-      EventPattern: 
-        source: 
-          - "aws.ssm"
-        detail-type: 
-          - "Parameter Store Change"
-        detail: 
-          name: 
-            - !Ref DuoServiceIps
-      State: "ENABLED"
-      Targets: 
-        - 
-          Arn: !GetAtt UpdateDirectoryServiceMfaSettings.Arn
-          Id: "TargetFunctionV1"
-
-  #--------------------------------------------------
-  # Allow CloudWatch Event Rule to trigger Lambda 
-  # System Manager Parameter changes
-  #--------------------------------------------------
-  UpdateDirectoryPermissionForEventsToInvokeLambda: 
+      EventPattern:
+        source:
+          - aws.ssm
+        detail-type:
+          - Parameter Store Change
+        detail:
+          name:
+            - Ref: DuoServiceIps
+      State: ENABLED
+      Targets:
+        - Arn:
+            Fn::GetAtt:
+              - UpdateDirectoryServiceMfaSettings
+              - Arn
+          Id: TargetFunctionV1
+  UpdateDirectoryPermissionForEventsToInvokeLambda:
     Type: AWS::Lambda::Permission
-    Properties: 
-      FunctionName: !Ref UpdateDirectoryServiceMfaSettings
-      Action: "lambda:InvokeFunction"
-      Principal: "events.amazonaws.com"
-      SourceArn: !GetAtt UpdateDirectoryServiceEvent.Arn
-
-  #--------------------------------------------------
-  # IAM role used by the Lambda function to update the
-  # Directory Service MFA settings.
-  #--------------------------------------------------
+    Properties:
+      FunctionName:
+        Ref: UpdateDirectoryServiceMfaSettings
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn:
+        Fn::GetAtt:
+          - UpdateDirectoryServiceEvent
+          - Arn
   UpdateDirectoryServiceMfaSettingsRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
-              Service: [lambda.amazonaws.com]
+              Service:
+                - lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-        - !Ref DuoKmsIamPolicy
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Ref: DuoKmsIamPolicy
       Policies:
         - PolicyName: UpdateDirectoryServiceMfaSettings
           PolicyDocument:
@@ -961,238 +775,143 @@ Resources:
                   - ds:DisableRadius
                   - ds:EnableRadius
                   - ds:UpdateRadius
-                Resource: "*"
+                Resource: '*'
               - Effect: Allow
                 Action:
                   - secretsmanager:GetSecretValue
-                Resource: !Ref DuoConfigurationSettingsSecret
+                Resource:
+                  Ref: DuoConfigurationSettingsSecret
               - Effect: Allow
-                Action: 
+                Action:
                   - ssm:GetParameter
-                Resource: !Sub 'arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${DuoServiceIps}'
+                Resource:
+                  Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${DuoServiceIps}
               - Effect: Allow
-                Action: 
+                Action:
                   - sns:Publish
-                Resource: !Ref DuoNotification
-
-  #--------------------------------------------------
-  # Create a notification for Duo related events
-  #--------------------------------------------------
+                Resource:
+                  Ref: DuoNotification
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyWildcardResource
+          ignore_reasons:
+            - EIAMPolicyWildcardResource: Intent assumed for initial migration.
   DuoNotification:
     Type: AWS::SNS::Topic
     Properties:
-      KmsMasterKeyId: !GetAtt DuoKmsKey.Arn
+      KmsMasterKeyId:
+        Fn::GetAtt:
+          - DuoKmsKey
+          - Arn
       Subscription:
-        - Endpoint: !Ref NotificationEmail
+        - Endpoint:
+            Ref: NotificationEmail
           Protocol: email
-
-  #--------------------------------------------------
-  # This Lambda function will update the directory
-  # service MFA settings.
-  #--------------------------------------------------
   UpdateDirectoryServiceMfaSettings:
     Type: AWS::Lambda::Function
     Properties:
       Description: Update the Directory Service MFA settings.
       Handler: index.lambda_handler
-      KmsKeyArn: !GetAtt DuoKmsKey.Arn
-      Role: !GetAtt UpdateDirectoryServiceMfaSettingsRole.Arn
+      KmsKeyArn:
+        Fn::GetAtt:
+          - DuoKmsKey
+          - Arn
+      Role:
+        Fn::GetAtt:
+          - UpdateDirectoryServiceMfaSettingsRole
+          - Arn
       Runtime: python3.7
       Timeout: 900
       Environment:
         Variables:
-            # The ARN of the Secrets Manager secret containing the RADIUS shared
-            # secret is passed to this function by the Secrets Manager rotation
-            # feature.
-            ds_id: !Ref DirectoryServiceId
-            proxy_port: !Ref RadiusPortNumber
-            rs_arn: !Ref DuoConfigurationSettingsSecret
-            DuoSsm: !Ref DuoServiceIps 
-            Topic: !Ref DuoNotification
+          ds_id:
+            Ref: DirectoryServiceId
+          proxy_port:
+            Ref: RadiusPortNumber
+          rs_arn:
+            Ref: DuoConfigurationSettingsSecret
+          DuoSsm:
+            Ref: DuoServiceIps
+          Topic:
+            Ref: DuoNotification
       Tags:
-      - Key: duo:DirectoryServiceId
-        Value: !Ref DirectoryServiceId
+        - Key: duo:DirectoryServiceId
+          Value:
+            Ref: DirectoryServiceId
       Code:
-        ZipFile: |
-          import os
-          import boto3
-          import json
-          import time
-          from enum import Enum
-
-          class RadiusStatus(Enum):
-            Creating = 1
-            Completed = 2
-            Failed = 3
-            NotConfigured = 4
-
-          RADIUS_TIMEOUT = 5
-          RADIUS_RETRIES = 2
-          RADIUS_AUTHENTICATION_PROTOCOL = 'PAP'
-
-          ds_client = boto3.client('ds')
-          sc = boto3.client('secretsmanager')
-          ssm =boto3.client('ssm')
-          sns = boto3.client('sns')
-
-          ds_id = os.environ['ds_id']
-          ips = ssm.get_parameter(Name=os.environ['DuoSsm'])['Parameter']['Value']
-          def lambda_handler(event, context):
-            print(json.dumps(event))
-            
-            print('Directory Service Id: {}'.format(ds_id))
-            print('Fargate IP Addresses : {}'.format(ips))
-            
-            enable_radius(ds_id, ips)
-
-
-          def enable_radius(ds_id, nlb):
-
-              port = int(os.environ['proxy_port'])
-              rs = get_rs(os.environ['rs_arn'])
-
-              radius_settings = {
-                  "RadiusServers": [nlb],
-                  "RadiusPort": port,
-                  "RadiusTimeout": RADIUS_TIMEOUT,
-                  "RadiusRetries": RADIUS_RETRIES,
-                  "SharedSecret": rs,
-                  "AuthenticationProtocol": RADIUS_AUTHENTICATION_PROTOCOL,
-                  "DisplayLabel": "Duo MFA"
-              }
-
-              # Determine whether RADIUS has been configured.
-              radius_current = radius_status(ds_id)
-              print('Current RADIUS status: {}.'.format(radius_current))
-
-              # Enable RADIUS.
-              if radius_current in [RadiusStatus.NotConfigured, RadiusStatus.Failed]:
-                  # Enable the RADIUS settings for this directory.
-                  print('Enabling RADIUS configuration...')
-                  r = ds_client.enable_radius(
-                      DirectoryId = ds_id,
-                      RadiusSettings = radius_settings
-                  )
-
-              # Update RADIUS.
-              elif radius_current == RadiusStatus.Completed:
-                  # Update the RADIUS settings for this directory.
-                  print('Updating RADIUS configuration...')
-                  r = ds_client.update_radius(
-                      DirectoryId = ds_id,
-                      RadiusSettings = radius_settings
-                  )
-
-
-              # Now get the status; updating the directory service is asynchronous.
-              MAX_ATTEMPTS = 40
-              SLEEP_TIME = 15
-              attempt_number = 1
-
-              while attempt_number <= MAX_ATTEMPTS:
-                  r = ds_client.describe_directories(DirectoryIds=[ds_id])['DirectoryDescriptions'][0]
-
-                  print("** ATTEMPT {}: {}".format(attempt_number, r['RadiusStatus']))
-
-                  if r['RadiusStatus'] == 'Completed':
-                      print('Radius updated successfully')
-                      break
-                  elif r['RadiusStatus'] == 'Failed':
-                      print('Radius creation failed')
-                      break
-                  else:
-                      time.sleep(SLEEP_TIME)
-                      attempt_number +=1
-              
-              if attempt_number == MAX_ATTEMPTS:
-                print('Radius create/update timed out')
-                msg = 'Duo MFA update failed on '+ ds_id +'. Please check.'
-                sns.publish(TopicArn=os.environ['Topic'], Message=msg, Subject='Failed to update MFA')
-
-
-          def radius_status(ds_id):
-              return_value = -1
-              r = ds_client.describe_directories(DirectoryIds=[ds_id])['DirectoryDescriptions'][0]
-              if 'RadiusStatus' not in r:
-                  return_value = RadiusStatus.NotConfigured
-              elif r['RadiusStatus'] == 'Completed':
-                  return_value = RadiusStatus.Completed
-              elif r['RadiusStatus'] == 'Failed':
-                  return_value = RadiusStatus.Failed
-              elif r['RadiusStatus'] == 'Creating':
-                  return_value = RadiusStatus.Creating
-              return return_value
-
-          def get_rs(rs_arn):
-              rs = ''
-              r = sc.get_secret_value(
-                  SecretId = rs_arn
-              )
-              if 'SecretString' in r:
-                  rs = json.loads(r['SecretString'])['RadiusSharedSecret']
-              return rs
-
-  #--------------------------------------------------
-  # Create an Application Auto Scaling scalable target
-  # for Duo ECS service
-  #--------------------------------------------------
+        ZipFile: "import os\nimport boto3\nimport json\nimport time\nfrom enum import Enum\n\nclass RadiusStatus(Enum):\n  Creating = 1\n  Completed = 2\n  Failed = 3\n  NotConfigured = 4\n\nRADIUS_TIMEOUT\
+          \ = 5\nRADIUS_RETRIES = 2\nRADIUS_AUTHENTICATION_PROTOCOL = 'PAP'\n\nds_client = boto3.client('ds')\nsc = boto3.client('secretsmanager')\n ssm =boto3.client('ssm')\nsns = boto3.client('sns')\n\
+          \nds_id = os.environ['ds_id']\n ips = ssm.get_parameter(Name=os.environ['DuoSsm'])['Parameter']['Value']\n def lambda_handler(event, context):\n  print(json.dumps(event))\n  \n  print('Directory\
+          \ Service Id: {}'.format(ds_id))\n  print('Fargate IP Addresses : {}'.format(ips))\n  \n  enable_radius(ds_id, ips)\n\n\ndef enable_radius(ds_id, nlb):\n\n    port = int(os.environ['proxy_port'])\n\
+          \    rs = get_rs(os.environ['rs_arn'])\n\n    radius_settings = {\n        \"RadiusServers\": [nlb],\n        \"RadiusPort\": port,\n        \"RadiusTimeout\": RADIUS_TIMEOUT,\n        \"RadiusRetries\"\
+          : RADIUS_RETRIES,\n        \"SharedSecret\": rs,\n        \"AuthenticationProtocol\": RADIUS_AUTHENTICATION_PROTOCOL,\n        \"DisplayLabel\": \"Duo MFA\"\n    }\n\n    # Determine whether RADIUS\
+          \ has been configured.\n    radius_current = radius_status(ds_id)\n    print('Current RADIUS status: {}.'.format(radius_current))\n\n    # Enable RADIUS.\n    if radius_current in [RadiusStatus.NotConfigured,\
+          \ RadiusStatus.Failed]:\n        # Enable the RADIUS settings for this directory.\n        print('Enabling RADIUS configuration...')\n        r = ds_client.enable_radius(\n            DirectoryId\
+          \ = ds_id,\n            RadiusSettings = radius_settings\n        )\n\n    # Update RADIUS.\n    elif radius_current == RadiusStatus.Completed:\n        # Update the RADIUS settings for this directory.\n\
+          \        print('Updating RADIUS configuration...')\n        r = ds_client.update_radius(\n            DirectoryId = ds_id,\n            RadiusSettings = radius_settings\n        )\n\n\n    # Now\
+          \ get the status; updating the directory service is asynchronous.\n    MAX_ATTEMPTS = 40\n    SLEEP_TIME = 15\n    attempt_number = 1\n\n    while attempt_number <= MAX_ATTEMPTS:\n        r =\
+          \ ds_client.describe_directories(DirectoryIds=[ds_id])['DirectoryDescriptions'][0]\n\n        print(\"** ATTEMPT {}: {}\".format(attempt_number, r['RadiusStatus']))\n\n        if r['RadiusStatus']\
+          \ == 'Completed':\n            print('Radius updated successfully')\n            break\n        elif r['RadiusStatus'] == 'Failed':\n            print('Radius creation failed')\n            break\n\
+          \        else:\n            time.sleep(SLEEP_TIME)\n            attempt_number +=1\n    \n    if attempt_number == MAX_ATTEMPTS:\n      print('Radius create/update timed out')\n      msg = 'Duo\
+          \ MFA update failed on '+ ds_id +'. Please check.'\n      sns.publish(TopicArn=os.environ['Topic'], Message=msg, Subject='Failed to update MFA')\n\n\ndef radius_status(ds_id):\n    return_value\
+          \ = -1\n    r = ds_client.describe_directories(DirectoryIds=[ds_id])['DirectoryDescriptions'][0]\n    if 'RadiusStatus' not in r:\n        return_value = RadiusStatus.NotConfigured\n    elif r['RadiusStatus']\
+          \ == 'Completed':\n        return_value = RadiusStatus.Completed\n    elif r['RadiusStatus'] == 'Failed':\n        return_value = RadiusStatus.Failed\n    elif r['RadiusStatus'] == 'Creating':\n\
+          \        return_value = RadiusStatus.Creating\n    return return_value\n\ndef get_rs(rs_arn):\n    rs = ''\n    r = sc.get_secret_value(\n        SecretId = rs_arn\n    )\n    if 'SecretString'\
+          \ in r:\n        rs = json.loads(r['SecretString'])['RadiusSharedSecret']\n    return rs\n"
   DuoEcsScalableTarget:
     Type: AWS::ApplicationAutoScaling::ScalableTarget
-    Properties: 
-      MaxCapacity: !Ref DuoMaxCapacity
-      MinCapacity: !Ref RadiusProxyServerCount
-      ResourceId: !Sub 
-                    - 'service/${DuoCluster}/${DuoServiceName}'
-                    - DuoServiceName: !GetAtt DuoService.Name
-
-      RoleARN: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService'
+    Properties:
+      MaxCapacity:
+        Ref: DuoMaxCapacity
+      MinCapacity:
+        Ref: RadiusProxyServerCount
+      ResourceId:
+        Fn::Sub:
+          - service/${DuoCluster}/${DuoServiceName}
+          - DuoServiceName:
+              Fn::GetAtt:
+                - DuoService
+                - Name
+      RoleARN:
+        Fn::Sub: arn:${AWS::Partition}:iam::${AWS::AccountId}:role/aws-service-role/ecs.application-autoscaling.amazonaws.com/AWSServiceRoleForApplicationAutoScaling_ECSService
       ScalableDimension: ecs:service:DesiredCount
       ServiceNamespace: ecs
-
-  #--------------------------------------------------
-  # Create an Application Auto Scaling policy
-  # for Duo ECS service based on CPU
-  #--------------------------------------------------
   DuoServiceScalingPolicyCpu:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: !Sub ${AWS::StackName}-target-tracking-cpu70
+      PolicyName:
+        Fn::Sub: ${AWS::StackName}-target-tracking-cpu70
       PolicyType: TargetTrackingScaling
-      ScalingTargetId: !Ref DuoEcsScalableTarget
+      ScalingTargetId:
+        Ref: DuoEcsScalableTarget
       TargetTrackingScalingPolicyConfiguration:
         TargetValue: 70.0
         ScaleInCooldown: 180
         ScaleOutCooldown: 60
         PredefinedMetricSpecification:
           PredefinedMetricType: ECSServiceAverageCPUUtilization
-  
-  #--------------------------------------------------
-  # Create an Application Auto Scaling policy
-  # for Duo ECS service based on Memory (RAM)
-  #--------------------------------------------------
   DuoServiceScalingPolicyMem:
     Type: AWS::ApplicationAutoScaling::ScalingPolicy
     Properties:
-      PolicyName: !Sub ${AWS::StackName}-target-tracking-mem80
+      PolicyName:
+        Fn::Sub: ${AWS::StackName}-target-tracking-mem80
       PolicyType: TargetTrackingScaling
-      ScalingTargetId: !Ref DuoEcsScalableTarget
+      ScalingTargetId:
+        Ref: DuoEcsScalableTarget
       TargetTrackingScalingPolicyConfiguration:
         TargetValue: 80.0
         ScaleInCooldown: 180
         ScaleOutCooldown: 60
         PredefinedMetricSpecification:
           PredefinedMetricType: ECSServiceAverageMemoryUtilization
-  
-  #--------------------------------------------------
-  # Create an alarm for Duo ECS service CPU 
-  # will send email when CPU > 90
-  #--------------------------------------------------
   DuoServiceAlarmCpu:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmDescription: CPU alarm for DuoService
       AlarmActions:
-      - !Ref DuoNotification
+        - Ref: DuoNotification
       MetricName: CPUUtilization
       Namespace: AWS/ECS
       Statistic: Average
@@ -1201,21 +920,20 @@ Resources:
       Threshold: 90.0
       ComparisonOperator: GreaterThanThreshold
       Dimensions:
-      - Name: ServiceName
-        Value: !GetAtt DuoService.Name
-      - Name: ClusterName
-        Value: !Ref DuoCluster
-
-  #--------------------------------------------------
-  # Create an alarm for Duo ECS service CPU 
-  # will send email when Memory > 90
-  #--------------------------------------------------
+        - Name: ServiceName
+          Value:
+            Fn::GetAtt:
+              - DuoService
+              - Name
+        - Name: ClusterName
+          Value:
+            Ref: DuoCluster
   DuoServiceAlarmMemory:
     Type: AWS::CloudWatch::Alarm
     Properties:
       AlarmDescription: Memory alarm for DuoService
       AlarmActions:
-      - !Ref DuoNotification
+        - Ref: DuoNotification
       MetricName: MemoryUtilization
       Namespace: AWS/ECS
       Statistic: Average
@@ -1224,30 +942,30 @@ Resources:
       Threshold: 90.0
       ComparisonOperator: GreaterThanThreshold
       Dimensions:
-      - Name: ServiceName
-        Value: !GetAtt DuoService.Name
-      - Name: ClusterName
-        Value: !Ref DuoCluster
-
-  #--------------------------------------------------
-  # Create S3 Bucket for CodePipeline Artifacts
-  #--------------------------------------------------
-  ArtifactBucket: 
+        - Name: ServiceName
+          Value:
+            Fn::GetAtt:
+              - DuoService
+              - Name
+        - Name: ClusterName
+          Value:
+            Ref: DuoCluster
+  ArtifactBucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketEncryption:
         ServerSideEncryptionConfiguration:
           - ServerSideEncryptionByDefault:
-              SSEAlgorithm: 'aws:kms'
-              KMSMasterKeyID: !GetAtt DuoKmsKey.Arn
-  #--------------------------------------------------
-  # Create S3 Bucket Policy for CodePipeline 
-  # Artifact Bucket
-  #--------------------------------------------------
+              SSEAlgorithm: aws:kms
+              KMSMasterKeyID:
+                Fn::GetAtt:
+                  - DuoKmsKey
+                  - Arn
   ArtifactBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref ArtifactBucket
+      Bucket:
+        Ref: ArtifactBucket
       PolicyDocument:
         Version: 2012-10-17
         Statement:
@@ -1255,65 +973,70 @@ Resources:
               - s3:GetObject
               - s3:PutObject
             Effect: Allow
-            Resource: 
-              - !Sub 'arn:${AWS::Partition}:s3:::${ArtifactBucket}/*'
-            Principal: 
-              AWS: 
-                - !GetAtt DuoCodeBuildRole.Arn
-                - !GetAtt DuoCodePipelineRole.Arn
+            Resource:
+              - Fn::Sub: arn:${AWS::Partition}:s3:::${ArtifactBucket}/*
+            Principal:
+              AWS:
+                - Fn::GetAtt:
+                    - DuoCodeBuildRole
+                    - Arn
+                - Fn::GetAtt:
+                    - DuoCodePipelineRole
+                    - Arn
           - Action:
               - s3:ListBucket
             Effect: Allow
-            Resource: 
-              - !Sub 'arn:${AWS::Partition}:s3:::${ArtifactBucket}'
-            Principal: 
-              AWS: 
-                - !GetAtt DuoCodeBuildRole.Arn
-                - !GetAtt DuoCodePipelineRole.Arn
+            Resource:
+              - Fn::Sub: arn:${AWS::Partition}:s3:::${ArtifactBucket}
+            Principal:
+              AWS:
+                - Fn::GetAtt:
+                    - DuoCodeBuildRole
+                    - Arn
+                - Fn::GetAtt:
+                    - DuoCodePipelineRole
+                    - Arn
           - Action:
-            - s3:ListBucket
+              - s3:ListBucket
             Effect: Allow
             Principal: '*'
-            Resource: !GetAtt ArtifactBucket.Arn
+            Resource:
+              Fn::GetAtt:
+                - ArtifactBucket
+                - Arn
             Condition:
               StringLike:
-                'aws:userid': 
-                  - !Join [ '', [ !GetAtt DuoCodeBuildRole.RoleId, ':*' ] ]
-                  - !Join [ '', [ !GetAtt DuoCodePipelineRole.RoleId, ':*' ] ]
-                  
-  
-  #--------------------------------------------------
-  # Create an ECR repository for DuoAuthProxy 
-  # Set a lifecycle policy to retain based on input
-  #--------------------------------------------------
-  DuoEcrRepository: 
+                aws:userid:
+                  - Fn::Join:
+                      - ''
+                      - - Fn::GetAtt:
+                            - DuoCodeBuildRole
+                            - RoleId
+                        - :*
+                  - Fn::Join:
+                      - ''
+                      - - Fn::GetAtt:
+                            - DuoCodePipelineRole
+                            - RoleId
+                        - :*
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EPolicyWildcardPrincipal
+          ignore_reasons:
+            - EPolicyWildcardPrincipal: Intent assumed for initial migration.
+  DuoEcrRepository:
     Type: AWS::ECR::Repository
-    Properties: 
-      RepositoryName: !Ref EcrRepoName
+    Properties:
+      RepositoryName:
+        Ref: EcrRepoName
       LifecyclePolicy:
-        LifecyclePolicyText: !Sub |
-                              {
-                                "rules": [{
-                                  "rulePriority": 1,
-                                  "description": "remove older images",
-                                  "selection": {
-                                    "tagStatus": "untagged",
-                                    "countType": "sinceImagePushed",
-                                    "countUnit": "days",
-                                    "countNumber": ${EcrImageRetention}
-                                  },
-                                  "action": {
-                                    "type": "expire"
-                                  }
-                                }]
-                              }
-
-  #--------------------------------------------------
-  # Create CloudWatch Event on Duo Pipeline
-  # will send an email to admins if Pipeline fails
-  #--------------------------------------------------
+        LifecyclePolicyText:
+          Fn::Sub: "{\n  \"rules\": [{\n    \"rulePriority\": 1,\n    \"description\": \"remove older images\",\n    \"selection\": {\n      \"tagStatus\" : \"untagged\",\n      \"countType\": \"sinceImagePushed\"\
+            ,\n      \"countUnit\": \"days\",\n      \"countNumber\": ${EcrImageRetention}\n    },\n    \"action\": {\n      \"type\": \"expire\"\n    }\n  }]\n}\n"
   DuoEcrPipelineEvents:
-    Type: 'AWS::Events::Rule'
+    Type: AWS::Events::Rule
     Properties:
       Description: EventRule
       EventPattern:
@@ -1325,104 +1048,101 @@ Resources:
           state:
             - FAILED
           pipeline:
-            - !Ref DuoEcrPipeline
+            - Ref: DuoEcrPipeline
       State: ENABLED
       Targets:
-        - Arn: !Ref DuoNotification
+        - Arn:
+            Ref: DuoNotification
           Id: DuoEcrPipeline
-      
-  #--------------------------------------------------
-  # Allow CloudWatch permissions to send emails
-  #--------------------------------------------------
   DuoNotificationPolicy:
-    Type: 'AWS::SNS::TopicPolicy'
+    Type: AWS::SNS::TopicPolicy
     Properties:
       PolicyDocument:
         Statement:
           - Effect: Allow
             Principal:
               Service: events.amazonaws.com
-            Action: 'sns:Publish'
+            Action: sns:Publish
             Resource: '*'
       Topics:
-        - !Ref DuoNotification
-
-  #check
+        - Ref: DuoNotification
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyWildcardResource
+          ignore_reasons:
+            - EIAMPolicyWildcardResource: Intent assumed for initial migration.
   DuoEcrCodeCommitRepo:
     Type: AWS::CodeCommit::Repository
     DependsOn: DuoCleanupCustomResource
     Properties:
-      RepositoryName: !Ref CodeCommitRepoName
+      RepositoryName:
+        Ref: CodeCommitRepoName
       RepositoryDescription: CodeCommit Repo with code for building DuoAuthentication Proxy ECR images
       Code:
-        BranchName: !Ref CodeCommitBranchName
+        BranchName:
+          Ref: CodeCommitBranchName
         S3:
-          Bucket: !Ref ArtifactBucket
-          Key: !Sub ${QSS3KeyPrefix}scripts/packages/code_commit.zip
-  
-  #--------------------------------------------------
-  # Create an IAM role for Duo CodePipeline
-  # grant access to CodeCommit. CodeBuild and KMS
-  #--------------------------------------------------
+          Bucket:
+            Ref: ArtifactBucket
+          Key:
+            Fn::Sub: ${QSS3KeyPrefix}scripts/packages/code_commit.zip
   DuoCodePipelineRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           Effect: Allow
           Principal:
             Service: codepipeline.amazonaws.com
           Action: sts:AssumeRole
       Path: /
-      ManagedPolicyArns:   
-      - !Sub "arn:${AWS::Partition}:iam::aws:policy/AWSCodeCommitReadOnly"
-      - !Ref DuoCodeBuildPolicy
-      - !Ref DuoKmsIamPolicy
-
-  #--------------------------------------------------
-  # Create an IAM policy for CodeBuild 
-  #--------------------------------------------------
+      ManagedPolicyArns:
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/AWSCodeCommitReadOnly
+        - Ref: DuoCodeBuildPolicy
+        - Ref: DuoKmsIamPolicy
   DuoCodeBuildPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
-      ManagedPolicyName: !Sub '${AWS::StackName}-${AWS::Region}-codebuild'
+      ManagedPolicyName:
+        Fn::Sub: ${AWS::StackName}-${AWS::Region}-codebuild
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
-        - Action:
-          - codebuild:StartBuild
-          - codebuild:BatchGetBuilds
-          Effect: Allow
-          Resource:
-          - !Sub 'arn:${AWS::Partition}:codebuild:${AWS::Region}:${AWS::AccountId}:project/${AWS::StackName}'
-        - Action:
-          - codecommit:UploadArchive
-          Effect: Allow
-          Resource:
-          - !GetAtt DuoEcrCodeCommitRepo.Arn
-        - Action:
-          - s3:GetObject
-          - s3:PutObject
-          Effect: Allow
-          Resource: !Sub 'arn:${AWS::Partition}:s3:::${ArtifactBucket}/*'
-        - Effect: Allow
-          Resource:
-          - !Sub 'arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:*'
-          - !Sub 'arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:*:*'
-          Action:
-          - logs:CreateLogGroup
-          - logs:CreateLogStream
-          - logs:PutLogEvents
-
-  #--------------------------------------------------
-  # Create an IAM Role for CodeBuild 
-  #--------------------------------------------------
+          - Action:
+              - codebuild:StartBuild
+              - codebuild:BatchGetBuilds
+            Effect: Allow
+            Resource:
+              - Fn::Sub: arn:${AWS::Partition}:codebuild:${AWS::Region}:${AWS::AccountId}:project/${AWS::StackName}
+          - Action:
+              - codecommit:UploadArchive
+            Effect: Allow
+            Resource:
+              - Fn::GetAtt:
+                  - DuoEcrCodeCommitRepo
+                  - Arn
+          - Action:
+              - s3:GetObject
+              - s3:PutObject
+            Effect: Allow
+            Resource:
+              Fn::Sub: arn:${AWS::Partition}:s3:::${ArtifactBucket}/*
+          - Effect: Allow
+            Resource:
+              - Fn::Sub: arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:*
+              - Fn::Sub: arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:*:*
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
   DuoCodeBuildRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           Effect: Allow
           Principal:
@@ -1430,8 +1150,8 @@ Resources:
           Action: sts:AssumeRole
       Path: /
       ManagedPolicyArns:
-      - !Ref DuoCodeBuildPolicy
-      - !Ref DuoKmsIamPolicy
+        - Ref: DuoCodeBuildPolicy
+        - Ref: DuoKmsIamPolicy
       Policies:
         - PolicyName: GetEcrAccess
           PolicyDocument:
@@ -1440,7 +1160,7 @@ Resources:
               - Effect: Allow
                 Action:
                   - inspector2:ListFindings
-                Resource: "*"
+                Resource: '*'
               - Effect: Allow
                 Action:
                   - ecr:GetAuthorizationToken
@@ -1450,11 +1170,11 @@ Resources:
                   - inspector2:ListFindings
                   - inspector2:ListAccountPermissions
                   - inspector2:ListCoverage
-                Resource: "*"
+                Resource: '*'
               - Effect: Allow
                 Action:
                   - iam:CreateServiceLinkedRole
-                Resource: "*"
+                Resource: '*'
                 Condition:
                   StringEquals:
                     iam:AWSServiceName:
@@ -1470,48 +1190,65 @@ Resources:
                   - ecr:CompleteLayerUpload
                   - ecr:DescribeImageScanFindings
                   - ecr:DescribeImages
-                Resource: !GetAtt DuoEcrRepository.Arn
-
+                Resource:
+                  Fn::GetAtt:
+                    - DuoEcrRepository
+                    - Arn
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyWildcardResource
+          ignore_reasons:
+            - EIAMPolicyWildcardResource: Intent assumed for initial migration.
   DuoCodeBuildEcr:
-    Type: 'AWS::CodeBuild::Project'
+    Type: AWS::CodeBuild::Project
     Properties:
       Artifacts:
         Type: CODEPIPELINE
       Description: Build and deploy Duo AuthProxy containers
-      EncryptionKey: !GetAtt DuoKmsKey.Arn
+      EncryptionKey:
+        Fn::GetAtt:
+          - DuoKmsKey
+          - Arn
       Environment:
         ComputeType: BUILD_GENERAL1_SMALL
         EnvironmentVariables:
           - Name: ECR_REPO_NAME
             Type: PLAINTEXT
-            Value: !Ref DuoEcrRepository
+            Value:
+              Ref: DuoEcrRepository
           - Name: AWS_ACCOUNT_NUMBER
             Type: PLAINTEXT
-            Value: !Ref 'AWS::AccountId'
-        Image: 'aws/codebuild/standard:5.0'
+            Value:
+              Ref: AWS::AccountId
+        Image: aws/codebuild/standard:5.0
         Type: LINUX_CONTAINER
         PrivilegedMode: true
-      Name: !Sub '${AWS::StackName}'
-      ServiceRole: !GetAtt DuoCodeBuildRole.Arn
+      Name:
+        Fn::Sub: ${AWS::StackName}
+      ServiceRole:
+        Fn::GetAtt:
+          - DuoCodeBuildRole
+          - Arn
       Source:
         BuildSpec: buildspec.yaml
         Type: CODEPIPELINE
       TimeoutInMinutes: 480
-  
-  #--------------------------------------------------
-  # Create CodeBuild Project 
-  # for building AuthProxy ECR
-  #--------------------------------------------------
   DuoEcrPipeline:
-    Type: 'AWS::CodePipeline::Pipeline'
+    Type: AWS::CodePipeline::Pipeline
     DependsOn:
       - DuoCodeBuildPolicy
       - DuoKmsIamPolicy
     Properties:
       ArtifactStore:
-        Location: !Ref ArtifactBucket
+        Location:
+          Ref: ArtifactBucket
         Type: S3
-      RoleArn: !GetAtt DuoCodePipelineRole.Arn
+      RoleArn:
+        Fn::GetAtt:
+          - DuoCodePipelineRole
+          - Arn
       Stages:
         - Actions:
             - ActionTypeId:
@@ -1520,9 +1257,13 @@ Resources:
                 Provider: CodeCommit
                 Version: '1'
               Configuration:
-                BranchName: !Ref CodeCommitBranchName
+                BranchName:
+                  Ref: CodeCommitBranchName
                 PollForSourceChanges: 'false'
-                RepositoryName: !GetAtt DuoEcrCodeCommitRepo.Name
+                RepositoryName:
+                  Fn::GetAtt:
+                    - DuoEcrCodeCommitRepo
+                    - Name
               Name: SourceAction
               OutputArtifacts:
                 - Name: AppSource
@@ -1535,24 +1276,19 @@ Resources:
                 Provider: CodeBuild
                 Version: '1'
               Configuration:
-                ProjectName: !Ref DuoCodeBuildEcr
+                ProjectName:
+                  Ref: DuoCodeBuildEcr
               InputArtifacts:
                 - Name: AppSource
               Name: BuildDuoAuthProxyEcr
               RunOrder: 1
           Name: Build
-
-  #--------------------------------------------------
-  # Create CloudWatch Event which will
-  # start Pipeline on commit to specific branch
-  # in CodeCommit
-  #--------------------------------------------------
   DuoEcrPipelineCloudWatchEventRole:
-    Type: 'AWS::IAM::Role'
+    Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
         Statement:
-          - Action: 'sts:AssumeRole'
+          - Action: sts:AssumeRole
             Effect: Allow
             Principal:
               Service:
@@ -1562,86 +1298,71 @@ Resources:
       Policies:
         - PolicyDocument:
             Statement:
-              - Action: 'codepipeline:StartPipelineExecution'
+              - Action: codepipeline:StartPipelineExecution
                 Effect: Allow
-                Resource: !Sub >-
-                  arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${DuoEcrPipeline}
+                Resource:
+                  Fn::Sub: arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${DuoEcrPipeline}
             Version: 2012-10-17
-          PolicyName: 'duo-ecr-pipeline-trigger'
-  
-  #--------------------------------------------------
-  # Create CodeBuild Project 
-  # for building AuthProxy ECR
-  #--------------------------------------------------
+          PolicyName: duo-ecr-pipeline-trigger
   DuoEcrPipelineCloudWatchEventRule:
-    Type: 'AWS::Events::Rule'
+    Type: AWS::Events::Rule
     Properties:
-      Description: !Sub 'Amazon CloudWatch Rule which triggers the build for DuoAuthProxy ECR when the branch ${CodeCommitBranchName} is updated'
+      Description:
+        Fn::Sub: Amazon CloudWatch Rule which triggers the build for DuoAuthProxy ECR when the branch ${CodeCommitBranchName} is updated
       EventPattern:
         detail:
           event:
             - referenceCreated
             - referenceUpdated
           referenceName:
-            - !Ref CodeCommitBranchName
+            - Ref: CodeCommitBranchName
           referenceType:
             - branch
         detail-type:
           - CodeCommit Repository State Change
         resources:
-          - !GetAtt DuoEcrCodeCommitRepo.Arn
+          - Fn::GetAtt:
+              - DuoEcrCodeCommitRepo
+              - Arn
         source:
           - aws.codecommit
       Targets:
-        - Arn: !Sub >-
-            arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${DuoEcrPipeline}
-          # TODO: Replace the ID with a variable again. This previously referenced the corresponding
-          # resource, but TaskCat exceeds the 64 character name length limit even when shortened.
+        - Arn:
+            Fn::Sub: arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${DuoEcrPipeline}
           Id: DuoEcrPipeline
-          RoleArn: !GetAtt DuoEcrPipelineCloudWatchEventRole.Arn
-
-  #--------------------------------------------------
-  # Create a weekly CloudWatch trigger 
-  # for building AuthProxy ECR
-  #--------------------------------------------------
+          RoleArn:
+            Fn::GetAtt:
+              - DuoEcrPipelineCloudWatchEventRole
+              - Arn
   DuoEcrPipelineWeeklyTrigger:
     Type: AWS::Events::Rule
     Properties:
       Description: Amazon CloudWatch Rule which triggers the build for DuoAuthProxy ECR on a weekly basis
-      ScheduleExpression: !Sub 'cron(${EcrCronExpression})'
+      ScheduleExpression:
+        Fn::Sub: cron(${EcrCronExpression})
       Targets:
-        - Arn: !Sub >-
-            arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${DuoEcrPipeline}
-          # TODO: Replace the ID with a variable again. This previously referenced the corresponding
-          # resource, but TaskCat exceeds the 64 character name length limit even when shortened.
+        - Arn:
+            Fn::Sub: arn:${AWS::Partition}:codepipeline:${AWS::Region}:${AWS::AccountId}:${DuoEcrPipeline}
           Id: DuoEcrPipeline
-          RoleArn: !GetAtt DuoEcrPipelineCloudWatchEventRole.Arn
-
-  #--------------------------------------------------
-  # Create an SSM parameter 
-  # to store Custom Resource Event
-  #--------------------------------------------------
+          RoleArn:
+            Fn::GetAtt:
+              - DuoEcrPipelineCloudWatchEventRole
+              - Arn
   DuoCustomResourceEvent:
     Type: AWS::SSM::Parameter
     Properties:
       Description: Duo SNS event response for Custom Resource backed by SNS
       Type: String
       Value: default
-
-  #--------------------------------------------------
-  # Create an SNS topic for Custom Resource
-  #--------------------------------------------------
   DuoSnsCustomResourceTopic:
     Type: AWS::SNS::Topic
     Properties:
-      KmsMasterKeyId: !GetAtt DuoKmsKey.Arn
-
-  #--------------------------------------------------
-  # Create CloudWatch Event on success/failure  
-  # for SNS backed Custom Resource
-  #--------------------------------------------------
+      KmsMasterKeyId:
+        Fn::GetAtt:
+          - DuoKmsKey
+          - Arn
   DuoPipelineSnsEvents:
-    Type: 'AWS::Events::Rule'
+    Type: AWS::Events::Rule
     Properties:
       Description: EventRule
       EventPattern:
@@ -1655,144 +1376,126 @@ Resources:
             - SUCCEEDED
             - CANCELED
           pipeline:
-            - !Ref DuoEcrPipeline
+            - Ref: DuoEcrPipeline
       State: ENABLED
       Targets:
-        - Arn: !Ref DuoSnsCustomResourceTopic
+        - Arn:
+            Ref: DuoSnsCustomResourceTopic
           Id: DuoSnsCustomResourceTopic
-        - Arn: !GetAtt DuoSnsCustomResourceLambda.Arn
+        - Arn:
+            Fn::GetAtt:
+              - DuoSnsCustomResourceLambda
+              - Arn
           Id: DuoSnsCustomResourceLambda
-
-  #--------------------------------------------------
-  # Create SNS Subscription to Lambda 
-  # from SNS backed Custom Resource
-  #--------------------------------------------------
   DuoSnsCustomResourceTopicSubscriptionLambda:
     Type: AWS::SNS::Subscription
     Properties:
-      Endpoint: !GetAtt DuoSnsCustomResourceLambda.Arn
+      Endpoint:
+        Fn::GetAtt:
+          - DuoSnsCustomResourceLambda
+          - Arn
       Protocol: lambda
-      TopicArn: !Ref DuoSnsCustomResourceTopic
-  
-  #--------------------------------------------------
-  # Create SNS backed Custom Resource
-  #--------------------------------------------------
+      TopicArn:
+        Ref: DuoSnsCustomResourceTopic
   DuoSnsCustomResource:
-    DependsOn: 
+    DependsOn:
       - DuoSnsCustomResourcePermissionLambda
       - DuoSnsCustomResourceTopicSubscriptionLambda
       - DuoPipelineSnsEvents
     Type: Custom::Poller
     Properties:
-      ServiceToken: !Ref DuoSnsCustomResourceTopic
-      Pipeline: !Ref DuoEcrPipeline
-
-  #--------------------------------------------------
-  # Allow SNS Custom Resource to invoke Lambda
-  #--------------------------------------------------
+      ServiceToken:
+        Ref: DuoSnsCustomResourceTopic
+      Pipeline:
+        Ref: DuoEcrPipeline
   DuoSnsCustomResourcePermissionLambda:
     DependsOn: DuoSnsCustomResourceTopicSubscriptionLambda
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: !GetAtt DuoSnsCustomResourceLambda.Arn
+      FunctionName:
+        Fn::GetAtt:
+          - DuoSnsCustomResourceLambda
+          - Arn
       Action: lambda:InvokeFunction
       Principal: sns.amazonaws.com
-      SourceArn: !Ref DuoSnsCustomResourceTopic
-
-  #--------------------------------------------------
-  # Allow CodePipeline events to invoke Lambda
-  #--------------------------------------------------
+      SourceArn:
+        Ref: DuoSnsCustomResourceTopic
   DuoSnsCustomResourceEventsToInvokeLambda:
     Type: AWS::Lambda::Permission
     Properties:
-      FunctionName: !GetAtt DuoSnsCustomResourceLambda.Arn
+      FunctionName:
+        Fn::GetAtt:
+          - DuoSnsCustomResourceLambda
+          - Arn
       Action: lambda:InvokeFunction
       Principal: events.amazonaws.com
-      SourceArn: !GetAtt DuoPipelineSnsEvents.Arn
-
-  #--------------------------------------------------
-  # Create IAM role for Lambda
-  #--------------------------------------------------
+      SourceArn:
+        Fn::GetAtt:
+          - DuoPipelineSnsEvents
+          - Arn
   DuoSnsCustomResourceLambdaRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
-              Service: [lambda.amazonaws.com]
+              Service:
+                - lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-        - !Ref DuoKmsIamPolicy
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Ref: DuoKmsIamPolicy
       Policies:
         - PolicyName: DuoSnsCustomResourceEvent
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: '2012-10-17'
             Statement:
               - Effect: Allow
                 Action:
                   - ssm:PutParameter
                   - ssm:GetParameter*
-                Resource: !Sub 'arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${DuoCustomResourceEvent}'
-
-  #--------------------------------------------------
-  # Create Lambda function 
-  # to parse events from SNS and CodePipeline
-  #--------------------------------------------------
+                Resource:
+                  Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/${DuoCustomResourceEvent}
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyActionWildcard
+          ignore_reasons:
+            - EIAMPolicyActionWildcard: Intent assumed for initial migration.
   DuoSnsCustomResourceLambda:
     Type: AWS::Lambda::Function
     Properties:
       Description: Gathers event stream from Custom Resource and CodePipeline
       Handler: index.lambda_handler
-      KmsKeyArn: !GetAtt DuoKmsKey.Arn
-      Role: !GetAtt DuoSnsCustomResourceLambdaRole.Arn
+      KmsKeyArn:
+        Fn::GetAtt:
+          - DuoKmsKey
+          - Arn
+      Role:
+        Fn::GetAtt:
+          - DuoSnsCustomResourceLambdaRole
+          - Arn
       Runtime: python3.7
       Timeout: 900
       Environment:
         Variables:
-          SnsEvent: !Ref DuoCustomResourceEvent
+          SnsEvent:
+            Ref: DuoCustomResourceEvent
       Tags:
-      - Key: duo:DirectoryServiceId
-        Value: !Ref DirectoryServiceId
+        - Key: duo:DirectoryServiceId
+          Value:
+            Ref: DirectoryServiceId
       Code:
-        ZipFile: |
-          import json
-          import cfnresponse
-          import boto3
-          import os
-          ssm = boto3.client('ssm')
-          def lambda_handler(event, context):
-            print(json.dumps(event))
-            if  'Records' in event:
-              print('Message from SNS')
-              cfn_event = event['Records'][0]['Sns']['Message']
-              cfn_json = json.loads(cfn_event)
-              try:
-                if cfn_json['RequestType'] == 'Create':
-                  print('Create event, will place the event in SSM')
-                  ssm.put_parameter(Name=os.environ['SnsEvent'],Value=cfn_event,Type='String',Overwrite=True)
-                else:
-                  print('This is Update or Delete event, will send success')
-                  cfnresponse.send(cfn_json, context, cfnresponse.SUCCESS, {}, '')
-              except:
-                cfnresponse.send(cfn_json, context, cfnresponse.FAILED, {}, '')
-            if 'source' in event:
-              if event['source'] == 'aws.codepipeline':
-                print('CodePipeline event, checkint the detail')
-                cfn_event = ssm.get_parameter(Name=os.environ['SnsEvent'])['Parameter']['Value']
-                cfn_json = json.loads(cfn_event)
-                if event['detail']['state'] == 'SUCCEEDED':
-                  print('Pipeline is succeded')
-                  cfnresponse.send(cfn_json, context, cfnresponse.SUCCESS, {}, '')
-                else:
-                  print('CodePipeline is failed or cancelled')
-                  cfnresponse.send(cfn_json, context, cfnresponse.FAILED, {}, '')
-
-  #--------------------------------------------------
-  # Create KMS Key for Duo AuthProxy
-  #--------------------------------------------------
+        ZipFile: "import json\nimport cfnresponse\nimport boto3\nimport os\nssm = boto3.client('ssm')\ndef lambda_handler(event, context):\n  print(json.dumps(event))\n  if  'Records' in event:\n    print('Message\
+          \ from SNS')\n    cfn_event = event['Records'][0]['Sns']['Message']\n    cfn_json = json.loads(cfn_event)\n    try:\n      if cfn_json['RequestType'] == 'Create':\n        print('Create event,\
+          \ will place the event in SSM')\n        ssm.put_parameter(Name=os.environ['SnsEvent'],Value=cfn_event,Type='String',Overwrite=True)\n      else:\n        print('This is Update or Delete event,\
+          \ will send success')\n        cfnresponse.send(cfn_json, context, cfnresponse.SUCCESS, {}, '')\n    except:\n      cfnresponse.send(cfn_json, context, cfnresponse.FAILED, {}, '')\n  if 'source'\
+          \ in event:\n    if event['source'] == 'aws.codepipeline':\n      print('CodePipeline event, checkint the detail')\n      cfn_event = ssm.get_parameter(Name=os.environ['SnsEvent'])['Parameter']['Value']\n\
+          \      cfn_json = json.loads(cfn_event)\n      if event['detail']['state'] == 'SUCCEEDED':\n        print('Pipeline is succeded')\n        cfnresponse.send(cfn_json, context, cfnresponse.SUCCESS,\
+          \ {}, '')\n      else:\n        print('CodePipeline is failed or cancelled')\n        cfnresponse.send(cfn_json, context, cfnresponse.FAILED, {}, '')\n"
   DuoKmsKey:
     Type: AWS::KMS::Key
     Properties:
@@ -1802,381 +1505,420 @@ Resources:
         Version: '2012-10-17'
         Id: key-default-1
         Statement:
-        - Sid: Allow full access to key metadata to the root account
-          Effect: Allow
-          Principal:
-            AWS: !Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:root'
-          Action:
-          - kms:*
-          Resource: "*"
-        - !If 
-          - NoKmsAdmin
-          - !Ref 'AWS::NoValue'
-          - 
-            Sid: Allow administration of the key
+          - Sid: Allow full access to key metadata to the root account
             Effect: Allow
             Principal:
-              AWS: !Ref AdminArn
+              AWS:
+                Fn::Sub: arn:${AWS::Partition}:iam::${AWS::AccountId}:root
             Action:
-            - kms:Create*
-            - kms:Describe*
-            - kms:Enable*
-            - kms:List*
-            - kms:Put*
-            - kms:Update*
-            - kms:Revoke*
-            - kms:Disable*
-            - kms:Get*
-            - kms:Delete*
-            - kms:ScheduleKeyDeletion
-            - kms:CancelKeyDeletion
+              - kms:*
             Resource: '*'
-        - Sid: Allow AWS Services to use the key
-          Effect: Allow
-          Principal:
-            AWS: "*"
-          Action:
-          - kms:Encrypt
-          - kms:Decrypt
-          - kms:ReEncrypt*
-          - kms:GenerateDataKey*
-          - kms:CreateGrant
-          - kms:DescribeKey
-          Resource: "*"
-          Condition:
-            StringEquals:
-              kms:CallerAccount: !Ref 'AWS::AccountId'
-              kms:ViaService:
-              - !Sub 'lambda.${AWS::Region}.amazonaws.com'
-              - !Sub 'sns.${AWS::Region}.amazonaws.com'
-              - !Sub 's3.${AWS::Region}.amazonaws.com'
-              - !Sub 'secretsmanager.${AWS::Region}.amazonaws.com'
-
-  #--------------------------------------------------
-  # Create a key alias for Duo AuthProxy
-  #--------------------------------------------------
+          - Fn::If:
+              - NoKmsAdmin
+              - Ref: AWS::NoValue
+              - Sid: Allow administration of the key
+                Effect: Allow
+                Principal:
+                  AWS:
+                    Ref: AdminArn
+                Action:
+                  - kms:Create*
+                  - kms:Describe*
+                  - kms:Enable*
+                  - kms:List*
+                  - kms:Put*
+                  - kms:Update*
+                  - kms:Revoke*
+                  - kms:Disable*
+                  - kms:Get*
+                  - kms:Delete*
+                  - kms:ScheduleKeyDeletion
+                  - kms:CancelKeyDeletion
+                Resource: '*'
+          - Sid: Allow AWS Services to use the key
+            Effect: Allow
+            Principal:
+              AWS: '*'
+            Action:
+              - kms:Encrypt
+              - kms:Decrypt
+              - kms:ReEncrypt*
+              - kms:GenerateDataKey*
+              - kms:CreateGrant
+              - kms:DescribeKey
+            Resource: '*'
+            Condition:
+              StringEquals:
+                kms:CallerAccount:
+                  Ref: AWS::AccountId
+                kms:ViaService:
+                  - Fn::Sub: lambda.${AWS::Region}.amazonaws.com
+                  - Fn::Sub: sns.${AWS::Region}.amazonaws.com
+                  - Fn::Sub: s3.${AWS::Region}.amazonaws.com
+                  - Fn::Sub: secretsmanager.${AWS::Region}.amazonaws.com
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyActionWildcard
+            - EIAMPolicyWildcardResource
+          ignore_reasons:
+            - EIAMPolicyActionWildcard: Intent assumed for initial migration.
+            - EIAMPolicyWildcardResource: Intent assumed for initial migration.
   DuoKmsKeyAlias:
     Type: AWS::KMS::Alias
     Properties:
       AliasName: alias/duoAuthProxy
-      TargetKeyId: !Ref DuoKmsKey
-
-  # Based on: https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-users-crypto
-  #--------------------------------------------------
-  # Create an IAM policy that allows the use of KMS key
-  #--------------------------------------------------
+      TargetKeyId:
+        Ref: DuoKmsKey
   DuoKmsIamPolicy:
     Type: AWS::IAM::ManagedPolicy
     Properties:
-      # ManagedPolicyName: !Sub '${AWS::StackName}-${AWS::Region}-kms'
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
-        - Action:
-          - kms:Encrypt
-          - kms:Decrypt
-          - kms:ReEncrypt*
-          - kms:DescribeKey
-          - kms:GetPublicKey
-          Effect: Allow
-          Resource: !GetAtt DuoKmsKey.Arn
-
-  #--------------------------------------------------
-  # Create a IAM role for Cleanup
-  #--------------------------------------------------
+          - Action:
+              - kms:Encrypt
+              - kms:Decrypt
+              - kms:ReEncrypt*
+              - kms:DescribeKey
+              - kms:GetPublicKey
+            Effect: Allow
+            Resource:
+              Fn::GetAtt:
+                - DuoKmsKey
+                - Arn
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyActionWildcard
+          ignore_reasons:
+            - EIAMPolicyActionWildcard: Intent assumed for initial migration.
   DuoCleanupServiceRole:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: '2012-10-17'
         Statement:
           - Effect: Allow
             Principal:
-              Service: [lambda.amazonaws.com]
+              Service:
+                - lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - !Sub 'arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
-        - !Ref DuoKmsIamPolicy
+        - Fn::Sub: arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - Ref: DuoKmsIamPolicy
       Policies:
         - PolicyName: DuoEcrCleanup
           PolicyDocument:
-            Version: "2012-10-17"
+            Version: '2012-10-17'
             Statement:
               - Effect: Allow
                 Action:
-                  - 'ecr:DescribeImages'
-                  - 'ecr:BatchDeleteImage'
-                Resource: !GetAtt DuoEcrRepository.Arn
+                  - ecr:DescribeImages
+                  - ecr:BatchDeleteImage
+                Resource:
+                  Fn::GetAtt:
+                    - DuoEcrRepository
+                    - Arn
         - PolicyName: s3-access
           PolicyDocument:
             Version: 2012-10-17
             Statement:
               - Effect: Allow
                 Action:
-                  - 's3:PutObject'
-                  - 's3:GetObject'
-                  - 's3:DeleteObject'
-                  - 's3:ListBucketVersion*'
-                  - 's3:ListBucket'
-                  - 's3:DeleteObjectVersion'
-                  - 's3:GetObjectVersion*'
-                Resource: 
-                  - !Sub 'arn:${AWS::Partition}:s3:::${ArtifactBucket}'
-                  - !Sub 'arn:${AWS::Partition}:s3:::${ArtifactBucket}/*'
-                  - !Sub 'arn:${AWS::Partition}:s3:::${QSS3BucketName}'
-                  - !Sub 'arn:${AWS::Partition}:s3:::${QSS3BucketName}/*'
-
-  #--------------------------------------------------
-  # Create a Lambda function for Cleanup
-  #--------------------------------------------------
+                  - s3:PutObject
+                  - s3:GetObject
+                  - s3:DeleteObject
+                  - s3:ListBucketVersion*
+                  - s3:ListBucket
+                  - s3:DeleteObjectVersion
+                  - s3:GetObjectVersion*
+                Resource:
+                  - Fn::Sub: arn:${AWS::Partition}:s3:::${ArtifactBucket}
+                  - Fn::Sub: arn:${AWS::Partition}:s3:::${ArtifactBucket}/*
+                  - Fn::Sub: arn:${AWS::Partition}:s3:::${QSS3BucketName}
+                  - Fn::Sub: arn:${AWS::Partition}:s3:::${QSS3BucketName}/*
+    Metadata:
+      cfn-lint:
+        config:
+          ignore_checks:
+            - EIAMPolicyActionWildcard
+          ignore_reasons:
+            - EIAMPolicyActionWildcard: Intent assumed for initial migration.
   DuoCleanupFunction:
     Type: AWS::Lambda::Function
     Properties:
       Description: Cleanup ECR images and S3 artifact bucket on delete of stack
       Handler: index.lambda_handler
-      KmsKeyArn: !GetAtt DuoKmsKey.Arn
-      Role: !GetAtt DuoCleanupServiceRole.Arn
+      KmsKeyArn:
+        Fn::GetAtt:
+          - DuoKmsKey
+          - Arn
+      Role:
+        Fn::GetAtt:
+          - DuoCleanupServiceRole
+          - Arn
       Runtime: python3.7
       Timeout: 900
       Environment:
         Variables:
-          DuoEcr: !Ref DuoEcrRepository
-          DuoBucket: !Ref ArtifactBucket
+          DuoEcr:
+            Ref: DuoEcrRepository
+          DuoBucket:
+            Ref: ArtifactBucket
       Code:
-        ZipFile: |
-          import json
-          import cfnresponse
-          import boto3
-          import os
-          import time
-          ecr = boto3.client('ecr')
-          s3 = boto3.resource('s3')
-          ecr_repo = os.environ['DuoEcr']
-          artifact_bucket = os.environ['DuoBucket']
-          bucket = s3.Bucket(artifact_bucket)
-          
-          def lambda_handler(event, context):
-            print(json.dumps(event))
-            source_bucket = event['ResourceProperties']['Source']
-            source_bucket_prefix = event['ResourceProperties']['Prefix']
-            objects = event['ResourceProperties']['Objects']
-            try:
-              if event['RequestType'] == 'Delete':
-                print('Delete event, will clean up ECR and S3')
-                time.sleep(120)
-                delete_all_ecr_images(ecr_repo)
-                bucket.object_versions.all().delete()
-              elif event['RequestType'] == 'Create':
-                print('Create event, will populate S3')
-                s3 = boto3.client('s3')
-                for o in objects:
-                    key = source_bucket_prefix + o
-                    copy_source={
-                        'Bucket': source_bucket,
-                        'Key': key
-                    }
-                    s3.copy_object(CopySource=copy_source, Bucket=artifact_bucket, Key=key)
-
-              else:
-                print('This is Update event, will send success')
-              cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, '')
-            except:
-              cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, '')
-          
-          def delete_all_ecr_images(ecr_repo):
-            len_images = ecr.describe_images(repositoryName=ecr_repo)['imageDetails']
-            while len(len_images) > 0:
-              for image in len_images:
-                ecr.batch_delete_image(repositoryName=ecr_repo,imageIds = [{'imageDigest': image['imageDigest']}])
-              len_images = ecr.describe_images(repositoryName=ecr_repo)['imageDetails']
-
-  #--------------------------------------------------
-  # Create a Custom Resource for Cleanup
-  #--------------------------------------------------
+        ZipFile: "import json\nimport cfnresponse\nimport boto3\nimport os\nimport time\necr = boto3.client('ecr')\ns3 = boto3.resource('s3')\necr_repo = os.environ['DuoEcr']\n artifact_bucket = os.environ['DuoBucket']\n\
+          bucket = s3.Bucket(artifact_bucket)\n \ndef lambda_handler(event, context):\n  print(json.dumps(event))\n  source_bucket = event['ResourceProperties']['Source']\n  source_bucket_prefix = event['ResourceProperties']['Prefix']\n\
+          \  objects = event['ResourceProperties']['Objects']\n  try:\n    if event['RequestType'] == 'Delete':\n      print('Delete event, will clean up ECR and S3')\n      time.sleep(120)\n      delete_all_ecr_images(ecr_repo)\n\
+          \      bucket.object_versions.all().delete()\n    elif event['RequestType'] == 'Create':\n      print('Create event, will populate S3')\n      s3 = boto3.client('s3')\n      for o in objects:\n\
+          \          key = source_bucket_prefix + o\n          copy_source={\n              'Bucket': source_bucket,\n              'Key': key\n          }\n          s3.copy_object(CopySource=copy_source,\
+          \ Bucket=artifact_bucket, Key=key)\n\n    else:\n      print('This is Update event, will send success')\n    cfnresponse.send(event, context, cfnresponse.SUCCESS, {}, '')\n  except:\n    cfnresponse.send(event,\
+          \ context, cfnresponse.SUCCESS, {}, '')\n\ndef delete_all_ecr_images(ecr_repo):\n  len_images = ecr.describe_images(repositoryName=ecr_repo)['imageDetails']\n  while len(len_images) > 0:\n   \
+          \ for image in len_images:\n      ecr.batch_delete_image(repositoryName=ecr_repo,imageIds = [{'imageDigest': image['imageDigest']}])\n    len_images = ecr.describe_images(repositoryName=ecr_repo)['imageDetails']\n"
   DuoCleanupCustomResource:
     Type: Custom::DuoCleanup
     Properties:
-      ServiceToken: !GetAtt DuoCleanupFunction.Arn
-      DuoEcr: !Ref DuoEcrRepository
-      DuoBucket: !Ref ArtifactBucket
-      Source: !Ref QSS3BucketName
-      Prefix: !Ref QSS3KeyPrefix
-      SourceRegion: !Ref QSS3BucketRegion
+      ServiceToken:
+        Fn::GetAtt:
+          - DuoCleanupFunction
+          - Arn
+      DuoEcr:
+        Ref: DuoEcrRepository
+      DuoBucket:
+        Ref: ArtifactBucket
+      Source:
+        Ref: QSS3BucketName
+      Prefix:
+        Ref: QSS3KeyPrefix
+      SourceRegion:
+        Ref: QSS3BucketRegion
       Objects:
         - scripts/packages/code_commit.zip
-
-
-#--------------------------------------------------
-# Outputs
-#--------------------------------------------------
 Outputs:
-  
   DuoRadiusProxyVpc:
-    Value: !GetAtt GetDirectoryServiceDetails.VpcId
+    Value:
+      Fn::GetAtt:
+        - GetDirectoryServiceDetails
+        - VpcId
     Description: VPC ID of directory
   ArtifactBucket:
-   Value: !Ref ArtifactBucket
-   Description: S3 bucket to store CodePipeline Artifacts
+    Value:
+      Ref: ArtifactBucket
+    Description: S3 bucket to store CodePipeline Artifacts
   DuoCluster:
-    Value: !Ref DuoCluster
+    Value:
+      Ref: DuoCluster
     Description: ECS Fargate Cluster for Duo AuthProxy
   DuoCodeBuildEcr:
-    Value: !Ref DuoCodeBuildEcr
+    Value:
+      Ref: DuoCodeBuildEcr
     Description: CodeBuild Project that builds the ECR image for Duo AuthProxy
   DuoCodeBuildPolicy:
-    Value: !Ref DuoCodeBuildPolicy
+    Value:
+      Ref: DuoCodeBuildPolicy
     Description: IAM policy to allow CodeBuild to build ECR images
   DuoCodeBuildRole:
-    Value: !Ref DuoCodeBuildRole
+    Value:
+      Ref: DuoCodeBuildRole
     Description: IAM role for CodeBuild
   DuoCodePipelineRole:
-    Value: !Ref DuoCodePipelineRole
+    Value:
+      Ref: DuoCodePipelineRole
     Description: IAM Role for CodePipeline
   DuoConfigurationSettingsSecret:
-    Value: !Ref DuoConfigurationSettingsSecret
+    Value:
+      Ref: DuoConfigurationSettingsSecret
     Description: Secrets Manager secret that stores the Duo AuthProxy information
   DuoConfigurationSettingsSecretRotationLambdaInvokePermission:
-    Value: !Ref DuoConfigurationSettingsSecretRotationLambdaInvokePermission
-    Description: Lambda permission to allow Secrets Manager 
+    Value:
+      Ref: DuoConfigurationSettingsSecretRotationLambdaInvokePermission
+    Description: Lambda permission to allow Secrets Manager
   DuoConfigurationSettingsSecretRotationSchedule:
-    Value: !Ref DuoConfigurationSettingsSecretRotationSchedule
+    Value:
+      Ref: DuoConfigurationSettingsSecretRotationSchedule
     Description: Secrets Manager Rotation Schedule
   DuoCustomResourceEvent:
-    Value: !Ref DuoCustomResourceEvent
+    Value:
+      Ref: DuoCustomResourceEvent
     Description: CloudWatch event for CodePipeline status for Custom Resource
   DuoEcrCodeCommitRepo:
-    Value: !Ref DuoEcrCodeCommitRepo
+    Value:
+      Ref: DuoEcrCodeCommitRepo
     Description: CodeCommit repo for Duo AuthProxy
   DuoEcrPipeline:
-    Value: !Ref DuoEcrPipeline
+    Value:
+      Ref: DuoEcrPipeline
     Description: CodePipeline for building Duo AuthProxy images
   DuoEcrPipelineCloudWatchEventRole:
-    Value: !Ref DuoEcrPipelineCloudWatchEventRole
+    Value:
+      Ref: DuoEcrPipelineCloudWatchEventRole
     Description: IAM role to trigger CodePipeline based on CodeCommit
   DuoEcrPipelineCloudWatchEventRule:
-    Value: !Ref DuoEcrPipelineCloudWatchEventRule
+    Value:
+      Ref: DuoEcrPipelineCloudWatchEventRule
     Description: Event based trigger on CodePipeline
   DuoEcrPipelineEvents:
-    Value: !Ref DuoEcrPipelineEvents
+    Value:
+      Ref: DuoEcrPipelineEvents
     Description: Events on Duo AuthProxy CodePipeline
   DuoEcrPipelineWeeklyTrigger:
-    Value: !Ref DuoEcrPipelineWeeklyTrigger
+    Value:
+      Ref: DuoEcrPipelineWeeklyTrigger
     Description: Weekly trigger for building Duo AuthProxy images
   DuoEcrRepository:
-    Value: !Ref DuoEcrRepository
+    Value:
+      Ref: DuoEcrRepository
     Description: Elastic Container Repository for Duo AuthProxy
   DuoEcsScalableTarget:
-    Value: !Ref DuoEcsScalableTarget
+    Value:
+      Ref: DuoEcsScalableTarget
     Description: ECS scalable target for Duo AuthProxy
   DuoKmsIamPolicy:
-    Value: !Ref DuoKmsIamPolicy
+    Value:
+      Ref: DuoKmsIamPolicy
     Description: IAM policy for KMS key
   DuoKmsKey:
-    Value: !Ref DuoKmsKey
+    Value:
+      Ref: DuoKmsKey
     Description: KMS Key for Duo AuthProxy
   DuoKmsKeyAlias:
-    Value: !Ref DuoKmsKeyAlias
+    Value:
+      Ref: DuoKmsKeyAlias
     Description: KMS Key alias for Duo AuthProxy
   DuoNotification:
-    Value: !Ref DuoNotification
+    Value:
+      Ref: DuoNotification
     Description: Email notification to Duo Admins
   DuoNotificationPolicy:
-    Value: !Ref DuoNotificationPolicy
+    Value:
+      Ref: DuoNotificationPolicy
     Description: Allow other AWS services to send email incase of failures to Duo Admins
   DuoPipelineSnsEvents:
-    Value: !Ref DuoPipelineSnsEvents
+    Value:
+      Ref: DuoPipelineSnsEvents
     Description: CodePipeline events for Custom Resource on Create
   DuoService:
-    Value: !Ref DuoService
+    Value:
+      Ref: DuoService
     Description: ECS service for Duo AuthProxy
   DuoServiceAlarmCpu:
-    Value: !Ref DuoServiceAlarmCpu
+    Value:
+      Ref: DuoServiceAlarmCpu
     Description: Alarm to notify admins for ECS Service CPU
   DuoServiceAlarmMemory:
-    Value: !Ref DuoServiceAlarmMemory
+    Value:
+      Ref: DuoServiceAlarmMemory
     Description: Alarm to notify admins for ECS Service Memory
   DuoServiceEvents:
-    Value: !Ref DuoServiceEvents
+    Value:
+      Ref: DuoServiceEvents
     Description: Event stream for Duo ECS service
   DuoServiceIps:
-    Value: !Ref DuoServiceIps
+    Value:
+      Ref: DuoServiceIps
     Description: SSM parameter store for Fargate IPs
   DuoServiceScalingPolicyCpu:
-    Value: !Ref DuoServiceScalingPolicyCpu
+    Value:
+      Ref: DuoServiceScalingPolicyCpu
     Description: Duo ECS service Application Auto Scaling for CPU
   DuoServiceScalingPolicyMem:
-    Value: !Ref DuoServiceScalingPolicyMem
+    Value:
+      Ref: DuoServiceScalingPolicyMem
     Description: Duo ECS service Application Auto Scaling for memory
   DuoServiceSg:
-    Value: !Ref DuoServiceSg
+    Value:
+      Ref: DuoServiceSg
     Description: EC2 Security group for Duo Fargate Service
   DuoSnsCustomResource:
-    Value: !Ref DuoSnsCustomResource
+    Value:
+      Ref: DuoSnsCustomResource
     Description: SNS backed custom resource for ECR image
   DuoSnsCustomResourceEventsToInvokeLambda:
-    Value: !Ref DuoSnsCustomResourceEventsToInvokeLambda
+    Value:
+      Ref: DuoSnsCustomResourceEventsToInvokeLambda
     Description: Allow Custom Resource SNS to invoke Lambda
   DuoSnsCustomResourceLambda:
-    Value: !Ref DuoSnsCustomResourceLambda
+    Value:
+      Ref: DuoSnsCustomResourceLambda
     Description: Lambda function to process custom resource events
   DuoSnsCustomResourceLambdaRole:
-    Value: !Ref DuoSnsCustomResourceLambdaRole
+    Value:
+      Ref: DuoSnsCustomResourceLambdaRole
     Description: IAM role for lambda to process custom resource events
   DuoSnsCustomResourcePermissionLambda:
-    Value: !Ref DuoSnsCustomResourcePermissionLambda
+    Value:
+      Ref: DuoSnsCustomResourcePermissionLambda
     Description: Allow Events to invoke lambda
   DuoSnsCustomResourceTopic:
-    Value: !Ref DuoSnsCustomResourceTopic
+    Value:
+      Ref: DuoSnsCustomResourceTopic
     Description: SNS topic for Custom Resource
   DuoSnsCustomResourceTopicSubscriptionLambda:
-    Value: !Ref DuoSnsCustomResourceTopicSubscriptionLambda
-    Description: SNS Subscription from Custom Resource to lambda 
+    Value:
+      Ref: DuoSnsCustomResourceTopicSubscriptionLambda
+    Description: SNS Subscription from Custom Resource to lambda
   DuoTaskDefinition:
-    Value: !Ref DuoTaskDefinition
+    Value:
+      Ref: DuoTaskDefinition
     Description: ECS Task Definition for Duo AuthProxy
   DuoTaskRoleArn:
-    Value: !Ref DuoTaskRoleArn
+    Value:
+      Ref: DuoTaskRoleArn
     Description: IAM role for ECS Fargate tasks
   GetDirectoryServiceDetails:
-    Value: !Ref GetDirectoryServiceDetails
+    Value:
+      Ref: GetDirectoryServiceDetails
     Description: Custom Resource to get Directory Service Details
   GetDirectoryServiceFunction:
-    Value: !Ref GetDirectoryServiceFunction
+    Value:
+      Ref: GetDirectoryServiceFunction
     Description: Lambda function to get Directory Service details
   GetDirectoryServiceMfaSettingsRole:
-    Value: !Ref GetDirectoryServiceMfaSettingsRole
+    Value:
+      Ref: GetDirectoryServiceMfaSettingsRole
     Description: IAM role to get Directory Service details
   PermissionForEventsToInvokeLambda:
-    Value: !Ref PermissionForEventsToInvokeLambda
+    Value:
+      Ref: PermissionForEventsToInvokeLambda
     Description: Allow Duo ECS Service events to trigger Lambda
   ProcessDuoServiceEventsRole:
-    Value: !Ref ProcessDuoServiceEventsRole
+    Value:
+      Ref: ProcessDuoServiceEventsRole
     Description: IAM role to process ECS service events
   ProcessDuoServiceFunction:
-    Value: !Ref ProcessDuoServiceFunction
+    Value:
+      Ref: ProcessDuoServiceFunction
     Description: Lambda function to process ECS Service events
   RadiusProxyCloudWatchLogsGroup:
-    Value: !Ref RadiusProxyCloudWatchLogsGroup
+    Value:
+      Ref: RadiusProxyCloudWatchLogsGroup
     Description: CloudWatch log group for Duo ECS Service
   RadiusSharedSecretRotationRole:
-    Value: !Ref RadiusSharedSecretRotationRole
+    Value:
+      Ref: RadiusSharedSecretRotationRole
     Description: IAM role to allow Secrets Manager Rotation
   RotateRadiusSharedSecretFunction:
-    Value: !Ref RotateRadiusSharedSecretFunction
+    Value:
+      Ref: RotateRadiusSharedSecretFunction
     Description: Lambda function to rotate secrets
   UpdateDirectoryPermissionForEventsToInvokeLambda:
-    Value: !Ref UpdateDirectoryPermissionForEventsToInvokeLambda
+    Value:
+      Ref: UpdateDirectoryPermissionForEventsToInvokeLambda
     Description: Allow change in Fargate IPs to trigger lambda via SSM
   UpdateDirectoryServiceEvent:
-    Value: !Ref UpdateDirectoryServiceEvent
+    Value:
+      Ref: UpdateDirectoryServiceEvent
     Description: Fargate IP change event
   UpdateDirectoryServiceMfaSettings:
-    Value: !Ref UpdateDirectoryServiceMfaSettings
+    Value:
+      Ref: UpdateDirectoryServiceMfaSettings
     Description: Lambda function to update MFA of directory
   UpdateDirectoryServiceMfaSettingsRole:
-    Value: !Ref UpdateDirectoryServiceMfaSettingsRole
+    Value:
+      Ref: UpdateDirectoryServiceMfaSettingsRole
     Description: IAM role to allow update MFA of Directory
   Postdeployment:
     Value: https://fwd.aws/n7wKB?
     Description: See the deployment guide for post-deployment steps.
- 
