@@ -812,3 +812,6 @@ Outputs:
         Fn::Sub: ${AWS::StackName}-RadiusProxyBootstrapSystemsManagerBucket
     Value:
       Ref: RadiusProxyBootstrapSystemsManagerBucket
+  QSS3BucketRegion:
+    Value:
+      Ref: QSS3BucketRegion
