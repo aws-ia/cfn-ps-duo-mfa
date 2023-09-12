@@ -123,7 +123,7 @@ Resources:
                 - lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
         - PolicyName: DescribeDirectoryServices
           PolicyDocument:
@@ -145,7 +145,7 @@ Resources:
         Fn::GetAtt:
           - GetDirectoryServiceMfaSettingsRole
           - Arn
-      Runtime: python3.6
+      Runtime: python3.9
       Timeout: 60
       Tags:
         - Key: duo:DirectoryServiceId
@@ -236,7 +236,7 @@ Resources:
                 - ec2.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore
       Policies:
         - PolicyName: InstancePermissions
           PolicyDocument:
@@ -256,7 +256,7 @@ Resources:
                 Action:
                   - ssm:GetParameter
                 Resource:
-                  - Fn::Sub: arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/DuoRadiusConfiguration/${DirectoryServiceId}/CloudWatchAgentConfiguration
+                  - Fn::Sub: arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/DuoRadiusConfiguration/${DirectoryServiceId}/CloudWatchAgentConfiguration
               - Effect: Allow
                 Action:
                   - ec2:CreateTags
@@ -500,7 +500,7 @@ Resources:
                 - lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
         - PolicyName: UpdateDirectoryServiceMfaSettings
           PolicyDocument:
@@ -540,7 +540,7 @@ Resources:
         Fn::GetAtt:
           - UpdateDirectoryServiceMfaSettingsRole
           - Arn
-      Runtime: python3.6
+      Runtime: python3.9
       Timeout: 180
       Environment:
         Variables:
@@ -586,7 +586,7 @@ Resources:
                 - lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Policies:
         - PolicyName: RotateDuoConfigurationSettingsSecret
           PolicyDocument:
@@ -612,7 +612,7 @@ Resources:
                 Action:
                   - s3:PutObject
                 Resource:
-                  Fn::Sub: arn:aws:s3:::${RadiusProxyBootstrapSystemsManagerBucket}/*
+                  Fn::Sub: arn:${AWS::Partition}:s3:::${RadiusProxyBootstrapSystemsManagerBucket}/*
               - Effect: Allow
                 Action:
                   - iam:PassRole
@@ -636,7 +636,7 @@ Resources:
         Fn::GetAtt:
           - RadiusSharedSecretRotationRole
           - Arn
-      Runtime: python3.6
+      Runtime: python3.9
       Timeout: 60
       Environment:
         Variables:
@@ -702,7 +702,7 @@ Resources:
               Service: lambda.amazonaws.com
             Action: sts:AssumeRole
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
       Path: /
       Policies:
         - PolicyName: lambda-copier
