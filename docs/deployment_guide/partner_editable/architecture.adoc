@@ -1,10 +1,7 @@
+Deploying this Partner Solution for a new virtual private cloud (VPC) with
+default parameters builds the following {partner-product-short-name} environment in the AWS Cloud.
+
 :xrefstyle: short
-
-Deploying this Partner Solution with default parameters builds the following {partner-product-short-name} environment in the
-AWS Cloud.
-
-// Replace this example diagram with your own. Follow our wiki guidelines: https://w.amazon.com/bin/view/AWS_Quick_Starts/Process_for_PSAs/#HPrepareyourarchitecturediagram. Upload your source PowerPoint file to the GitHub {deployment name}/docs/images/ directory in its repository.
-
 [#architecture1]
 .Partner Solution architecture for {partner-product-short-name} on AWS
 image::../docs/deployment_guide/images/architecture_diagram.png[Architecture]
@@ -12,17 +9,22 @@ image::../docs/deployment_guide/images/architecture_diagram.png[Architecture]
 As shown in <<architecture1>>, this Partner Solution sets up the following:
 
 * A highly available architecture that spans two Availability Zones.*
-* A virtual private cloud (VPC) configured with public and private subnets, according to AWS
-best practices, to provide you with your own virtual network on AWS.*
-* In the public subnets:
-** Managed network address translation (NAT) gateways to allow outbound
-internet access for resources in the private subnets.*
-** A Linux bastion host in an Auto Scaling group to allow inbound Secure
-Shell (SSH) access to Amazon Elastic Compute Cloud (Amazon EC2) instances in public and private subnets.*
-* In the private subnets:
-** <item>.
-** <item>.
-// Add bullet points for any additional components that are included in the deployment. Ensure that the additional components are shown in the architecture diagram. End each bullet with a period.
-* <describe any additional components>.
+* A VPC configured with public and private subnets, according to AWS
+best practices, to provide you with your own virtual network on AWS.* 
+** In the public subnets, managed network address translation (NAT) gateways to allow outbound internet access for resources in the private subnets.*
+** A serverless managed AWS Fargate cluster with containers for Duo Authentication Proxy. The cluster is replaced whenever a new image is deployed or whenever the secrets are updated.
+* A continuous integration and continuous delivery (CI/CD) pipeline for image deployment: 
+** AWS CodePipeline to retrieve the latest code from AWS CodeCommit in response to an Amazon CloudWatch event once a week. You can change this frequency in the AWS CloudFormation parameter `EcrCronExpression` when you create or update the stack.
+** AWS CodeBuild, which CodePipeline uses to build a new container image. CodePipeline then uploads the new container image to Amazon Elastic Container Registry (Amazon ECR).
+* Image discovery:
+** Amazon ECR, which is configured to scan on push. Amazon ECR stores each new container image. CodeBuild jobs can wait for the results of the scan before completing. 
+** Amazon Elastic Container Service (Amazon ECS), which discovers the images and pushes them to Fargate. Application Auto Scaling automatically scales the Amazon ECS tasks when CPU or memory limits are reached. Scaling accommodates spikes in traffic, such as early morning logins. Similarly, when Amazon ECS does not see much activity, Application Auto Scaling decreases the number of tasks. It then initiates the workflow to get IP addresses from Lambda functions and update the AWS Directory Service RADIUS configuration.
+* CloudWatch CPU and memory alarms that invoke Amazon Simple Notification Service (Amazon SNS) notifications to Duo administrators when Fargate containers scale workloads up or down, when a new container is built, or when a container build fails.
+* An AWS Key Management Service (AWS KMS) key that encrypts all Duo Authentication Proxy-related resources.
+* Secrets and events management, which works as follows (a two- to three-minute process):
+** AWS Secrets Manager rotates the secrets that are used for the cluster. 
+** With each rotation, an AWS Lambda function replaces the Fargate containers, deploying the newest image.
+** After the Fargate containers stabilize, a CloudWatch event initiates a second Lambda function. This function updates the Duo MFA settings in AWS Systems Manager Parameter Store, which stores the latest Fargate container IP addresses. Specifically, this Lambda function finds the IP address of the Fargate task and updates the Systems Manager parameter `DuoServiceIps`.
+** Finally, a CloudWatch event initiates a third Lambda function. This function either updates the RADIUS IP address in AWS Directory Service or, if the update fails, sends Duo administrators an SNS notification.
 
-[.small]#* The template that deploys this Partner Solution into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#
+[.small]#*The template that deploys the Partner Solution into an existing VPC skips the components marked by asterisks and prompts you for your existing VPC configuration.#

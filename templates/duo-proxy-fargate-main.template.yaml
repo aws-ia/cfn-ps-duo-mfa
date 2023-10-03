@@ -1,0 +1,364 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  Configures Duo RADIUS ECS services using Fargate for use in Directory Service MFA (can be used
+  for AWS SSO, WorkSpaces, and other SAML service providers) (qs-1s5bmdj0f)
+Metadata:
+  QuickStartDocumentation:
+    EntrypointName: "Parameters for deploying into a new VPC"
+    Order: "1"
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label:
+          default: Network configuration
+        Parameters:
+          - AvailabilityZones
+          - VPCCIDR
+          - PrivateSubnet1CIDR
+          - PrivateSubnet2CIDR
+          - PublicSubnet1CIDR
+          - PublicSubnet2CIDR
+      - Label:
+          default: Microsoft Active Directory configuration
+        Parameters:
+          - DomainDNSName
+          - DomainNetBIOSName
+          - DomainAdminPassword
+          - ADEdition
+          - KeyPairName
+      - Label:
+          default: Duo Account settings
+        Parameters:
+          - DuoIntegrationKey
+          - DuoSecretKey
+          - DuoApiHostName
+      - Label:
+          default: RADIUS proxy configuration settings
+        Parameters:
+          - RadiusProxyServerCount
+          - RadiusPortNumber
+          - DuoFailMode
+          - DuoMaxCapacity
+          - NotificationEmail
+      - Label:
+          default: Duo Authentication Proxy ECR configuration
+        Parameters:
+          - EcrImageRetention
+          - EcrRepoName
+      - Label:
+          default: CodeCommit configuration
+        Parameters:
+          - CodeCommitRepoName
+          - CodeCommitBranchName
+      - Label:
+          default: Quick Start configuration
+        Parameters:
+          - QSS3BucketName
+          - QSS3BucketRegion
+          - QSS3KeyPrefix
+    ParameterLabels:
+      ADEdition:
+        default: AWS Managed Microsoft AD edition
+      AvailabilityZones:
+        default: Availability Zones
+      CodeCommitBranchName:
+        default: CodeCommit branch name
+      CodeCommitRepoName:
+        default: CodeCommit repo name
+      DomainAdminPassword:
+        default: Administrator password
+      DomainDNSName:
+        default: Domain DNS name
+      DomainNetBIOSName:
+        default: Domain NetBIOS name
+      DuoApiHostName:
+        default: Duo API hostname
+      DuoFailMode:
+        default: Duo fail mode
+      DuoIntegrationKey:
+        default: Duo integration key
+      DuoMaxCapacity:
+        default: Duo maximum tasks
+      DuoSecretKey:
+        default: Duo secret key
+      EcrImageRetention:
+        default: ECR retention period
+      EcrRepoName:
+        default: ECR repo name
+      KeyPairName:
+        default: Key pair name
+      NotificationEmail:
+        default: Duo administrator email
+      PrivateSubnet1CIDR:
+        default: Private subnet 1 CIDR
+      PrivateSubnet2CIDR:
+        default: Private subnet 2 CIDR
+      PublicSubnet1CIDR:
+        default: Public subnet 1 CIDR
+      PublicSubnet2CIDR:
+        default: Public subnet 2 CIDR
+      QSS3BucketName:
+        default: Quick Start S3 bucket name
+      QSS3BucketRegion:
+        default: Quick Start S3 bucket Region
+      QSS3KeyPrefix:
+        default: Quick Start S3 key prefix
+      RadiusPortNumber:
+        default: RADIUS port number
+      RadiusProxyServerCount:
+        default: RADIUS proxy server count
+      VPCCIDR:
+        default: VPC CIDR
+Parameters:
+  ADEdition:
+    AllowedValues:
+      - Standard
+      - Enterprise
+    Default: Enterprise
+    Description: AWS Managed Microsoft AD edition you want to deploy.
+    Type: String
+  AvailabilityZones:
+    Description:
+      Availability Zones to use for the subnets in the VPC. The logical order is preserved. This deployment uses only 2 AZs.
+    Type: List<AWS::EC2::AvailabilityZone::Name>
+  CodeCommitBranchName: 
+    Type: String
+    Description: Name of the CodeCommit branch where all the code base is located. This branch starts actions in CodePipeline.
+    Default: ecr
+    AllowedPattern: "^[0-9a-zA-Z-/]*$"
+  CodeCommitRepoName:
+    Type: String
+    Description: Name of the CodeCommit repo that will manage all the code base.
+    Default: duo-authproxy
+    AllowedPattern: "^[0-9a-zA-Z-/]*$"
+  DomainAdminPassword:
+    AllowedPattern: (?=^.{6,255}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*
+    Description: Account password for the administrator. Must be at least 8 characters containing letters, numbers, and symbols.
+    MaxLength: '32'
+    MinLength: '8'
+    NoEcho: 'true'
+    Type: String
+  DomainDNSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+\..+'
+    Default: example.com
+    Description: Fully qualified domain name (FQDN) of the forest root domain.
+    MaxLength: '255'
+    MinLength: '2'
+    Type: String
+  DomainNetBIOSName:
+    AllowedPattern: '[a-zA-Z0-9\-]+'
+    Default: example
+    Description: NetBIOS name of the domain (up to 15 characters) for users of earlier versions of Windows.
+    MaxLength: '15'
+    MinLength: '1'
+    Type: String
+  DuoApiHostName:
+    Type: String
+    Description: >
+      API hostname retrieved from the Duo RADIUS application configuration.
+#    AllowedPattern: ^api\-[a-zA-Z0-9]*.duofederal.com$
+#    ConstraintDescription: >
+#      API hostname must match pattern api-12345678.duosecurity.com
+  DuoFailMode:
+    Type: String
+    Description: >
+      After primary authentication succeeds, safe mode allows authentication attempts
+      if the Duo service cannot be contacted. Secure mode rejects authentication attempts
+      if the Duo service cannot be contacted.
+    AllowedValues:
+      - "safe"
+      - "secure"
+    Default: "safe"
+  DuoIntegrationKey:
+    Type: String
+    Description: >
+      Integration key retrieved from the Duo RADIUS application configuration.
+  DuoMaxCapacity:
+    Type: String
+    Description: >
+      Maximum number of tasks that can be launched by ECS Application Auto Scaling.
+    Default: 4
+    AllowedValues:
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9 
+      - 10
+  DuoSecretKey:
+    Type: String
+    NoEcho: true
+    Description: >
+      Secret key retrieved from the Duo RADIUS application configuration.
+  EcrImageRetention:
+    Type: Number
+    Description: Number of days to retain the ECR image.
+    ConstraintDescription: 'Must be in the range [30-600].'
+    Default: 30
+    MinValue: 30
+    MaxValue: 600
+  EcrRepoName:
+    Type: String
+    Description: Duo Authentication Proxy ECR repo name.
+    Default: duo-authproxy
+    AllowedPattern: "(?:[a-z0-9]+(?:[._-][a-z0-9]+)*/)*[a-z0-9]+(?:[._-][a-z0-9]+)*"
+    MinLength: 2
+    MaxLength: 256
+  KeyPairName:
+    Description: Name of the key pair that allows you to securely connect to your instance after it launches.
+    Type: AWS::EC2::KeyPair::KeyName
+  NotificationEmail:
+    Type: String
+    Description: Email address of Duo administrators to notify when the pipeline fails or when an update to the directory fails.
+    AllowedPattern: '^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$'
+    ConstraintDescription: Provide a valid email address.
+  PrivateSubnet1CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Default: 10.0.0.0/19
+    Description: CIDR block for private subnet 1 located in Availability Zone 1.
+    Type: String
+  PrivateSubnet2CIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Default: 10.0.32.0/19
+    Description: CIDR block for private subnet 2 located in Availability Zone 2.
+    Type: String
+  PublicSubnet1CIDR:
+    Default: 10.0.128.0/20
+    Description: CIDR block for the public subnet 2 located in Availability Zone
+      2.
+    Type: String
+  PublicSubnet2CIDR:
+    Default: 10.0.144.0/20
+    Description: CIDR block for the optional public subnet 3 located in Availability
+      Zone 3.
+    Type: String
+  QSS3BucketName:
+    AllowedPattern: ^[0-9a-zA-Z]+([0-9a-zA-Z-]*[0-9a-zA-Z])*$
+    ConstraintDescription:
+      The Quick Start bucket name can include numbers, lowercase
+      letters, uppercase letters, and hyphens (-). It cannot start or end with a 
+      hyphen (-).
+    Default: aws-ia-us-east-1
+    Description:
+      Name of the S3 bucket for your copy of the Quick Start assets. 
+      Keep the default name unless you are customizing the template. 
+      Changing the name updates code references to point to a new Quick 
+      Start location. This name can include numbers, lowercase letters, 
+      uppercase letters, and hyphens, but do not start or end with a hyphen (-). 
+      See https://aws-quickstart.github.io/option1.html.
+    Type: String
+  QSS3BucketRegion:
+    Default: us-east-1
+    Description: 'AWS Region where the Quick Start S3 bucket (QSS3BucketName) is 
+    hosted. Keep the default Region unless you are customizing the template. 
+    Changing this Region updates code references to point to a new Quick Start location. 
+    When using your own bucket, specify the Region. 
+    See https://aws-quickstart.github.io/option1.html.'
+    Type: String
+  QSS3KeyPrefix:
+    AllowedPattern: ^[0-9a-zA-Z-/]*$
+    ConstraintDescription: The Quick Start S3 key prefix can include numbers, lowercase letters,
+      uppercase letters, hyphens (-), and forward slashes (/). The prefix should
+      end with a forward slash (/).
+    Default: cfn-ps-duo-mfa/
+    Description:
+      S3 key prefix that is used to simulate a directory for your copy of the 
+      Quick Start assets. Keep the default prefix unless you are customizing 
+      the template. Changing this prefix updates code references to point to 
+      a new Quick Start location. This prefix can include numbers, lowercase 
+      letters, uppercase letters, hyphens (-), and forward slashes (/). End with 
+      a forward slash. See https://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html 
+      and https://aws-quickstart.github.io/option1.html.
+    Type: String
+  RadiusPortNumber:
+    Type: Number
+    Description: >
+      Port on which to listen for incoming RADIUS access requests.
+    Default: 1812
+    ConstraintDescription: 'Must be in the range [1150-65535].'
+    MinValue: 1150
+    MaxValue: 65535
+  RadiusProxyServerCount:
+    Type: Number
+    Default: 2
+    AllowedValues:
+      - 1
+      - 2
+      - 3
+      - 4
+    Description: >
+      Number of RADIUS proxy Fargate servers to create.
+  VPCCIDR:
+    AllowedPattern: ^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\/(1[6-9]|2[0-8]))$
+    ConstraintDescription: CIDR block parameter must be in the form x.x.x.x/16-28
+    Default: 10.0.0.0/16
+    Description: CIDR block for the VPC.
+    Type: String
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-ia-us-east-1']
+Resources:
+  VPCStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/cfn-ps-aws-vpc/templates/aws-vpc.template.yaml'
+        - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+          S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      Parameters:
+        AvailabilityZones: !Join [',', !Ref 'AvailabilityZones']
+        NumberOfAZs: '2'
+        PrivateSubnet1ACIDR: !Ref 'PrivateSubnet1CIDR'
+        PrivateSubnet2ACIDR: !Ref 'PrivateSubnet2CIDR'
+        PublicSubnet1CIDR: !Ref 'PublicSubnet1CIDR'
+        PublicSubnet2CIDR: !Ref 'PublicSubnet2CIDR'
+        VPCCIDR: !Ref 'VPCCIDR'
+  ADStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}submodules/cfn-ps-microsoft-activedirectory/templates/ad-3.template'
+        - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+          S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      Parameters:
+        ADEdition: !Ref 'ADEdition'
+        DomainAdminPassword: !Ref 'DomainAdminPassword'
+        DomainDNSName: !Ref 'DomainDNSName'
+        DomainNetBIOSName: !Ref 'DomainNetBIOSName'
+        KeyPairName: !Ref KeyPairName
+        MgmtServer: 'false'
+        PrivateSubnet1ID: !GetAtt 'VPCStack.Outputs.PrivateSubnet1AID'
+        PrivateSubnet2ID: !GetAtt 'VPCStack.Outputs.PrivateSubnet2AID'
+        QSS3BucketName: !Ref 'QSS3BucketName'
+        QSS3BucketRegion: !Ref 'QSS3BucketRegion'
+        QSS3KeyPrefix: !Ref 'QSS3KeyPrefix'
+        VPCCIDR: !Ref 'VPCCIDR'
+        VPCID: !GetAtt 'VPCStack.Outputs.VPCID'
+  DuoStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Sub
+        - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/duo-proxy-fargate.template.yaml'
+        - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+          S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+      Parameters:
+        adReadOnlyUser: 'Admin'
+        adReadOnlyPassword: !Ref 'DomainAdminPassword'
+        AdSync: 'no'
+        EcrRepoName: !Ref 'EcrRepoName'
+        EcrImageRetention: !Ref 'EcrImageRetention'
+        CodeCommitRepoName: !Ref 'CodeCommitRepoName'
+        CodeCommitBranchName: !Ref 'CodeCommitBranchName'
+        DuoIntegrationKey: !Ref 'DuoIntegrationKey'
+        DuoSecretKey: !Ref 'DuoSecretKey'
+        DuoApiHostName: !Ref 'DuoApiHostName'
+        DuoMaxCapacity: !Ref 'DuoMaxCapacity'
+        DirectoryServiceId: !GetAtt 'ADStack.Outputs.DirectoryID'
+        NotificationEmail: !Ref 'NotificationEmail'
+        RadiusProxyServerCount: !Ref 'RadiusProxyServerCount'
+        RadiusPortNumber: !Ref 'RadiusPortNumber'
+        DuoFailMode: !Ref 'DuoFailMode'
+        QSS3BucketName: !Ref 'QSS3BucketName'
+        QSS3BucketRegion: !Ref 'QSS3BucketRegion'
+        QSS3KeyPrefix: !Ref 'QSS3KeyPrefix'

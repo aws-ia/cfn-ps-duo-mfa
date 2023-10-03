@@ -1,0 +1,42 @@
+version: 0.2
+phases:
+  build:
+    commands:
+      - cd docker/
+      - docker build -t ${ECR_REPO_NAME} .
+      - DATE_TAG=$(date +'%Y-%b-%d')
+      - REPO_TAG=$DATE_TAG.$CODEBUILD_RESOLVED_SOURCE_VERSION
+  post_build:
+    commands:
+      - aws ecr get-login-password --region ${AWS_REGION}| docker login --username AWS --password-stdin ${AWS_ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com
+      - docker tag ${ECR_REPO_NAME}:latest ${AWS_ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:scan
+      - docker push ${AWS_ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:scan
+      - REGISTRY_SCAN_SETTING=`aws --region ${AWS_REGION} ecr get-registry-scanning-configuration --query 'scanningConfiguration.scanType' --output text`
+      - echo $REGISTRY_SCAN_SETTING
+      - |
+        if [ "$REGISTRY_SCAN_SETTING" = "ENHANCED" ]; then
+          IMAGE_SHA=`aws --region ${AWS_REGION} ecr describe-images --repository-name  ${ECR_REPO_NAME} --image-ids imageTag=scan --query 'imageDetails[0].imageDigest' --output text`
+          sleep 300 # this is to allow the scan to complete
+          echo '{"ecrImageRepositoryName": [{"comparison": "EQUALS","value": "'"${ECR_REPO_NAME}"'"}],"ecrImageTags": [{"comparison": "EQUALS","value": "scan"}], "ecrImageHash": [{"comparison": "EQUALS","value": "'"${IMAGE_SHA}"'"}], "severity": [{"comparison":"EQUALS","value": "CRITICAL"}]}' >> filter.json
+          cat filter.json
+          SCAN_FINDINGS=`aws --region ${AWS_REGION} inspector2 list-findings --filter-criteria file://filter.json --query 'length(findings)'`
+          echo $SCAN_FINDINGS
+          if [ "$SCAN_FINDINGS" -eq 0 ]; then
+            echo No findings in ECR scan. Pushing to latest
+            echo Tagging the scanned ECR to latest
+            docker tag ${ECR_REPO_NAME}:latest ${AWS_ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:latest
+            echo Tagging the scanned ECR to a custom tag for rollback/maintenance
+            docker tag ${ECR_REPO_NAME}:latest ${AWS_ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${REPO_TAG}
+            docker push ${AWS_ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:latest
+            docker push ${AWS_ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${REPO_TAG}
+          else
+            echo There were vunerlabilities in ECR repo
+            exit 1
+          fi
+        else
+          echo Enhanced scanning is not turned on. Pushing to latest without scanning.
+          docker tag ${ECR_REPO_NAME}:latest ${AWS_ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:latest
+          docker tag ${ECR_REPO_NAME}:latest ${AWS_ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${REPO_TAG}
+          docker push ${AWS_ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:latest
+          docker push ${AWS_ACCOUNT_NUMBER}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPO_NAME}:${REPO_TAG}
+        fi

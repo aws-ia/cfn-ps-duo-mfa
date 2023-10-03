@@ -1,33 +1,35 @@
 project:
-  name: cfn-sample-template
-  owner: quickstart@amazon.com
+  name: cfn-ps-duo-mfa
+  owner: quickstart-eng@amazon.com
+  shorten_stack_name: true
   package_lambda: false
   regions:
-  - ap-northeast-1
-  - ap-northeast-2
-  - ap-southeast-1
-  - ap-southeast-2
-  - eu-central-1
-  - eu-west-1
-  - sa-east-1
-  - us-east-1
-  - us-west-1
-  - us-west-2
-tests:
-  sample:
-    parameters:
-      Param1: 'Inputs to Stack'
-      # Examples: of other taskcat dynamic input parameters for more into see http://taskcat.io
-      #
-      #      AvailabilityZones: $[taskcat_genaz_3]
-      #      ByteValue: 1
-      #      PasswordA: $[taskcat_genpass_8A]
-      #      PasswordB: $[taskcat_genpass_32S]
-      #      RandomNumber: $[taskcat_random-numbers]
-      #      RandomString: $[taskcat_random-string]
-      #      StackName: TestStack
-      #      UUID: $[taskcat_genuuid]
-      #
-    regions:
+    - ap-northeast-1
+    - ap-south-1
+    - ap-southeast-1
+    - ca-central-1
+    - eu-central-1
+    - eu-west-1
+    - us-east-1
     - us-east-2
-    template: templates/another-workload.template.yaml
+    - us-west-2
+  s3_bucket: ''
+tests:
+  duomfa:
+    parameters:
+      AvailabilityZones: $[taskcat_genaz_2]
+      DuoApiHostName: override
+      DuoIntegrationKey: override
+      DuoSecretKey: override
+      RadiusProxyServerCount: 2
+      RadiusPortNumber: 1812
+      DomainDNSName: example.com
+      DomainNetBIOSName: EXAMPLE
+      DomainAdminPassword: $[taskcat_genpass_16]
+      KeyPairName: $[taskcat_getkeypair]
+      NotificationEmail: test@test.com
+      QSS3BucketRegion: $[taskcat_current_region]
+      QSS3BucketName: $[taskcat_autobucket]
+    regions:
+      - us-east-1
+    template: templates/duo-proxy-fargate-main.template.yaml
