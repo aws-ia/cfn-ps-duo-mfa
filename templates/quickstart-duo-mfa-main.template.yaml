@@ -194,7 +194,7 @@ Parameters:
     ConstraintDescription: Can include numbers, lowercase
       letters, uppercase letters, and hyphens (-). It cannot start or end with a hyphen
       (-).
-    Default: aws-ia-us-east-1
+    Default: aws-ia
     Description: S3 bucket name for the Quick Start assets. This name
       can include numbers, lowercase letters, uppercase letters, and hyphens (-).
       It cannot start or end with a hyphen (-).
@@ -332,7 +332,7 @@ Parameters:
     Description: Cron expression trigger at 0000 UTC every Saturday based on https://docs.aws.amazon.com/eventbridge/latest/userguide/scheduled-events.html 
     Default: '0 0 ? * SAT *'
 Conditions:
-  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-ia-us-east-1']
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-ia']
   UseFargate: !Equals [!Ref FargateDeployment, 'yes']
 
 Resources:
