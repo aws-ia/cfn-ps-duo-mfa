@@ -1669,7 +1669,7 @@ Resources:
           DuoBucket:
             Ref: ArtifactBucket
       Code:
-        ZipFile: "import json\nimport cfnresponse\nimport boto3\nimport os\nimport time\necr = boto3.client('ecr')\ns3 = boto3.resource('s3')\necr_repo = os.environ['DuoEcr']\n artifact_bucket = os.environ['DuoBucket']\n\
+        ZipFile: "import json\nimport cfnresponse\nimport boto3\nimport os\nimport time\necr = boto3.client('ecr')\ns3 = boto3.resource('s3')\necr_repo = os.environ['DuoEcr']\nartifact_bucket = os.environ['DuoBucket']\n\
           bucket = s3.Bucket(artifact_bucket)\n \ndef lambda_handler(event, context):\n  print(json.dumps(event))\n  source_bucket = event['ResourceProperties']['Source']\n  source_bucket_prefix = event['ResourceProperties']['Prefix']\n\
           \  objects = event['ResourceProperties']['Objects']\n  try:\n    if event['RequestType'] == 'Delete':\n      print('Delete event, will clean up ECR and S3')\n      time.sleep(120)\n      delete_all_ecr_images(ecr_repo)\n\
           \      bucket.object_versions.all().delete()\n    elif event['RequestType'] == 'Create':\n      print('Create event, will populate S3')\n      s3 = boto3.client('s3')\n      for o in objects:\n\
