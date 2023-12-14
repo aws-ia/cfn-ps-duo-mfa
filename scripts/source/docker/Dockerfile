@@ -2,7 +2,7 @@ FROM public.ecr.aws/amazonlinux/amazonlinux:latest
 
 COPY run_duo.sh /app/
 RUN set -xe && \
-    yum install gcc make openssl-devel zlib-devel libffi-devel tar wget gzip perl shadow-utils.x86_64 procps diffutils -y && \
+    yum install gcc make zlib-devel libffi-devel tar wget gzip perl shadow-utils.x86_64 procps diffutils -y && \
     wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 && \
     chmod +x ./jq && \
     cp jq /usr/bin && \
