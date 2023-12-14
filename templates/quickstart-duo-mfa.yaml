@@ -653,7 +653,7 @@ Resources:
             Ref: DirectoryServiceId
       Code:
         ZipFile:
-          Fn::Sub: "import boto3\nimport os\nimport json\n\nsecretsmanager_client = boto3.client('secretsmanager')\nssm_client = boto3.client('ssm')\n\n def lambda_handler(event, context):\n    arn = event['SecretId']\n\
+          Fn::Sub: "import boto3\nimport os\nimport json\n\nsecretsmanager_client = boto3.client('secretsmanager')\nssm_client = boto3.client('ssm')\n\ndef lambda_handler(event, context):\n    arn = event['SecretId']\n\
             \    token = event['ClientRequestToken']\n    step = event['Step']\n\n    if step == \"createSecret\":\n        create_secret(secretsmanager_client, arn, token)\n\n    elif step == \"finishSecret\"\
             :\n        finish_secret(secretsmanager_client, arn, token)\n        run_command_against_instances()\n\n    else:\n        pass # no-op\n\n\ndef create_secret(secretsmanager_client, arn, token):\n\
             \    # Get the secret\n    secret = json.loads(secretsmanager_client.get_secret_value(SecretId=arn, VersionStage=\"AWSCURRENT\")['SecretString'])\n\n    # Generate a random password\n    secret['RadiusSharedSecret']\
@@ -738,7 +738,7 @@ Resources:
           - Arn
       Timeout: 240
       Code:
-        ZipFile: "import json\nimport logging\nimport threading\nimport boto3\n import cfnresponse\n\n\ndef copy_objects(source_bucket, dest_bucket, prefix, objects):\n    s3 = boto3.client('s3')\n    for\
+        ZipFile: "import json\nimport logging\nimport threading\nimport boto3\nimport cfnresponse\n\n\ndef copy_objects(source_bucket, dest_bucket, prefix, objects):\n    s3 = boto3.client('s3')\n    for\
           \ o in objects:\n        key = prefix + o\n        copy_source = {\n            'Bucket': source_bucket,\n            'Key': key\n        }\n        print('copy_source: %s' % copy_source)\n  \
           \      print('dest_bucket = %s'%dest_bucket)\n        print('key = %s' %key)\n        s3.copy_object(CopySource=copy_source, Bucket=dest_bucket,\n              Key=key)\n\n\ndef delete_objects(bucket,\
           \ prefix, objects):\n    s3 = boto3.client('s3')\n    objects = {'Objects': [{'Key': prefix + o} for o in objects]}\n    s3.delete_objects(Bucket=bucket, Delete=objects)\n \n\ndef timeout(event,\
