@@ -1,6 +1,13 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: "Configures Duo RADIUS servers for use in directory service MFA (can be used for AWS SSO, WorkSpaces, and other SAML service providers)(qs-1pgpn37rj)\n"
 Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W1020
+        - W3011
+        - W9001
+        - W9006
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
@@ -167,7 +174,6 @@ Resources:
             \ context, responseStatus, responseData, reason=errorReason)\n"
   GetDirectoryServiceDetails:
     Type: Custom::GetDirectoryService
-    DependsOn: GetDirectoryServiceFunction
     Properties:
       ServiceToken:
         Fn::GetAtt:

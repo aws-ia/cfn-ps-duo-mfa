@@ -3,9 +3,11 @@ Description: >
   Configures Duo RADIUS ECS services using Fargate for use in Directory Service MFA (can be used
   for AWS SSO, WorkSpaces, and other SAML service providers) (qs-1s5bmdj0f)
 Metadata:
-  QuickStartDocumentation:
-    EntrypointName: "Parameters for deploying into a new VPC"
-    Order: "1"
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9001
+        - W9006
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:

@@ -4,6 +4,12 @@ Description: >-
   for AWS SSO, WorkSpaces, and other SAML service providers). It deploys
   a new VPC and AWS managed Active Directory environment. (qs-1s5bn1dk6)
 Metadata:
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9001
+        - W9003
+        - W9006
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:

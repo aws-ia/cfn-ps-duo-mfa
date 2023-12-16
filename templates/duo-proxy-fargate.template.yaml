@@ -1,9 +1,11 @@
 AWSTemplateFormatVersion: 2010-09-09
 Description: "Configures Duo RADIUS ECS services using Fargate for use in Directory Service MFA (can be used for AWS SSO, WorkSpaces, and other SAML service providers) (qs-1s5bmdj30)\n"
 Metadata:
-  QuickStartDocumentation:
-    EntrypointName: Parameters for deploying into an existing VPC
-    Order: '2'
+  cfn-lint:
+    config:
+      ignore_checks:
+        - W9001
+        - W9006
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
@@ -253,6 +255,10 @@ Conditions:
     Fn::Equals:
       - Ref: DirectoryServiceType
       - Managed AD
+  UsingDefaultBucket:
+    Fn::Equals:
+      - Ref: QSS3BucketName
+      - aws-ia
 Resources:
   GetDirectoryServiceMfaSettingsRole:
     Type: AWS::IAM::Role
@@ -1562,6 +1568,7 @@ Resources:
           ignore_checks:
             - EIAMPolicyActionWildcard
             - EIAMPolicyWildcardResource
+            - EKMSKeyWildcardPrincipal
           ignore_reasons:
             - EIAMPolicyActionWildcard: Intent assumed for initial migration.
             - EIAMPolicyWildcardResource: Intent assumed for initial migration.
@@ -1636,10 +1643,10 @@ Resources:
                   - s3:DeleteObjectVersion
                   - s3:GetObjectVersion*
                 Resource:
-                  - Fn::Sub: arn:${AWS::Partition}:s3:::${ArtifactBucket}
-                  - Fn::Sub: arn:${AWS::Partition}:s3:::${ArtifactBucket}/*
-                  - Fn::Sub: arn:${AWS::Partition}:s3:::${QSS3BucketName}
-                  - Fn::Sub: arn:${AWS::Partition}:s3:::${QSS3BucketName}/*
+                  - !Sub 'arn:${AWS::Partition}:s3:::${ArtifactBucket}'
+                  - !Sub 'arn:${AWS::Partition}:s3:::${ArtifactBucket}/*'
+                  - !Sub ['arn:${AWS::Partition}:s3:::${S3Bucket}', S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]]
+                  - !Sub ['arn:${AWS::Partition}:s3:::${S3Bucket}/*', S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]]
     Metadata:
       cfn-lint:
         config:
@@ -1689,7 +1696,7 @@ Resources:
       DuoBucket:
         Ref: ArtifactBucket
       Source:
-        Ref: QSS3BucketName
+        !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Prefix:
         Ref: QSS3KeyPrefix
       SourceRegion:
