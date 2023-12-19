@@ -1,0 +1,354 @@
+-----------------------------------------------------------------------------
+Region: us-east-1
+StackName: tCaT-duomfa-3606fb
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId    ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------  ---------------------------
+2023-12-19 16:16:35.997000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  tCaT-duomfa-3606fb
+2023-12-19 16:16:34.994000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  DuoStack
+2023-12-19 16:04:47.515000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  DuoStack             Resource creation Initiated
+2023-12-19 16:04:46.324000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  DuoStack
+2023-12-19 16:04:45.703000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  ADStack
+2023-12-19 15:31:34.517000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  ADStack              Resource creation Initiated
+2023-12-19 15:31:33.541000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  ADStack
+2023-12-19 15:31:33.015000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  VPCStack
+2023-12-19 15:28:02+00:00         CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  VPCStack             Resource creation Initiated
+2023-12-19 15:28:00.907000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  VPCStack
+2023-12-19 15:27:57.997000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-duomfa-3606fb   User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 19. December 2023 10:17AM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-east-1
+StackName: tCaT-duomfa-3606fb-VPCStack-V818U3UFSLT5
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                           LogicalResourceId                         ResourceStatusReason
+--------------------------------  ------------------  -------------------------------------  ----------------------------------------  ---------------------------
+2023-12-19 15:31:13.686000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack             tCaT-duomfa-3606fb-VPCStack-V818U3UFSLT5
+2023-12-19 15:31:08.758000+00:00  CREATE_COMPLETE     AWS::EC2::Route                        PrivateSubnet2ARoute
+2023-12-19 15:31:08.422000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PrivateSubnet2ARoute                      Resource creation Initiated
+2023-12-19 15:31:06.324000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PrivateSubnet2ARoute
+2023-12-19 15:31:02.065000+00:00  CREATE_COMPLETE     AWS::EC2::NatGateway                   NATGateway2
+2023-12-19 15:30:56.961000+00:00  CREATE_COMPLETE     AWS::EC2::Route                        PrivateSubnet1ARoute
+2023-12-19 15:30:56.656000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PrivateSubnet1ARoute                      Resource creation Initiated
+2023-12-19 15:30:54.436000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PrivateSubnet1ARoute
+2023-12-19 15:30:50.722000+00:00  CREATE_COMPLETE     AWS::EC2::NatGateway                   NATGateway1
+2023-12-19 15:29:00.079000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NatGateway                   NATGateway2                               Resource creation Initiated
+2023-12-19 15:28:59.137000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NatGateway                   NATGateway1                               Resource creation Initiated
+2023-12-19 15:28:58.689000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NatGateway                   NATGateway2
+2023-12-19 15:28:57.616000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NatGateway                   NATGateway1
+2023-12-19 15:28:55.203000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PublicSubnet1RouteTableAssociation
+2023-12-19 15:28:54.544000+00:00  CREATE_COMPLETE     AWS::EC2::EIP                          NAT2EIP
+2023-12-19 15:28:54.038000+00:00  CREATE_COMPLETE     AWS::EC2::EIP                          NAT1EIP
+2023-12-19 15:28:47.446000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint                  S3VPCEndpoint
+2023-12-19 15:28:47.126000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint                  S3VPCEndpoint                             Resource creation Initiated
+2023-12-19 15:28:45.075000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation
+2023-12-19 15:28:44.783000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation      Resource creation Initiated
+2023-12-19 15:28:44.588000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PublicSubnet1RouteTableAssociation        Resource creation Initiated
+2023-12-19 15:28:44.262000+00:00  CREATE_COMPLETE     AWS::EC2::Route                        PublicSubnetRoute
+2023-12-19 15:28:43.997000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PublicSubnet2RouteTableAssociation
+2023-12-19 15:28:43.968000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PublicSubnetRoute                         Resource creation Initiated
+2023-12-19 15:28:43.837000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint                  S3VPCEndpoint
+2023-12-19 15:28:43.795000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation
+2023-12-19 15:28:43.715000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PublicSubnet2RouteTableAssociation        Resource creation Initiated
+2023-12-19 15:28:43.542000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation      Resource creation Initiated
+2023-12-19 15:28:43.320000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation
+2023-12-19 15:28:42.989000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PublicSubnet1RouteTableAssociation
+2023-12-19 15:28:42.560000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PublicSubnetRoute
+2023-12-19 15:28:42.297000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PublicSubnet2RouteTableAssociation
+2023-12-19 15:28:42.057000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation
+2023-12-19 15:28:39.132000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable
+2023-12-19 15:28:38.861000+00:00  CREATE_IN_PROGRESS  AWS::EC2::EIP                          NAT2EIP                                   Resource creation Initiated
+2023-12-19 15:28:38.850000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PublicSubnetRouteTable
+2023-12-19 15:28:38.721000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable
+2023-12-19 15:28:38.303000+00:00  CREATE_IN_PROGRESS  AWS::EC2::EIP                          NAT1EIP                                   Resource creation Initiated
+2023-12-19 15:28:37.472000+00:00  CREATE_IN_PROGRESS  AWS::EC2::EIP                          NAT2EIP
+2023-12-19 15:28:37.044000+00:00  CREATE_IN_PROGRESS  AWS::EC2::EIP                          NAT1EIP
+2023-12-19 15:28:33.334000+00:00  CREATE_COMPLETE     AWS::EC2::VPCGatewayAttachment         VPCGatewayAttachment
+2023-12-19 15:28:32.313000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PublicSubnet1
+2023-12-19 15:28:32.021000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PublicSubnet2
+2023-12-19 15:28:31.656000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCGatewayAttachment         VPCGatewayAttachment                      Resource creation Initiated
+2023-12-19 15:28:31.485000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet1A
+2023-12-19 15:28:31.081000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet2A
+2023-12-19 15:28:30.582000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCGatewayAttachment         VPCGatewayAttachment
+2023-12-19 15:28:29.408000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PublicSubnet1                             Resource creation Initiated
+2023-12-19 15:28:29.173000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PublicSubnet2                             Resource creation Initiated
+2023-12-19 15:28:28.861000+00:00  CREATE_COMPLETE     AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation
+2023-12-19 15:28:28.844000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1A                           Resource creation Initiated
+2023-12-19 15:28:28.568000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable                 Resource creation Initiated
+2023-12-19 15:28:28.516000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation                 Resource creation Initiated
+2023-12-19 15:28:28.291000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PublicSubnetRouteTable                    Resource creation Initiated
+2023-12-19 15:28:28.262000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2A                           Resource creation Initiated
+2023-12-19 15:28:28.195000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable                 Resource creation Initiated
+2023-12-19 15:28:27.854000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PublicSubnet2
+2023-12-19 15:28:27.810000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PublicSubnet1
+2023-12-19 15:28:27.348000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1A
+2023-12-19 15:28:27.188000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable
+2023-12-19 15:28:27.162000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PublicSubnetRouteTable
+2023-12-19 15:28:26.990000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation
+2023-12-19 15:28:26.966000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2A
+2023-12-19 15:28:26.786000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable
+2023-12-19 15:28:26.575000+00:00  CREATE_COMPLETE     AWS::EC2::InternetGateway              InternetGateway
+2023-12-19 15:28:23.267000+00:00  CREATE_COMPLETE     AWS::EC2::VPC                          VPC
+2023-12-19 15:28:16.568000+00:00  CREATE_COMPLETE     AWS::EC2::DHCPOptions                  DHCPOptions
+2023-12-19 15:28:12.255000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPC                          VPC                                       Resource creation Initiated
+2023-12-19 15:28:11.064000+00:00  CREATE_IN_PROGRESS  AWS::EC2::InternetGateway              InternetGateway                           Resource creation Initiated
+2023-12-19 15:28:10.980000+00:00  CREATE_IN_PROGRESS  AWS::EC2::DHCPOptions                  DHCPOptions                               Resource creation Initiated
+2023-12-19 15:28:10.560000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPC                          VPC
+2023-12-19 15:28:09.917000+00:00  CREATE_IN_PROGRESS  AWS::EC2::InternetGateway              InternetGateway
+2023-12-19 15:28:09.538000+00:00  CREATE_IN_PROGRESS  AWS::EC2::DHCPOptions                  DHCPOptions
+2023-12-19 15:28:01.650000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack             tCaT-duomfa-3606fb-VPCStack-V818U3UFSLT5  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 19. December 2023 10:17AM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-east-1
+StackName: tCaT-duomfa-3606fb-ADStack-CM4ADPQJJNXJ
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                         LogicalResourceId                        ResourceStatusReason
+--------------------------------  ------------------  -----------------------------------  ---------------------------------------  ---------------------------
+2023-12-19 16:02:34.164000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack           tCaT-duomfa-3606fb-ADStack-CM4ADPQJJNXJ
+2023-12-19 16:02:31.824000+00:00  CREATE_COMPLETE     AWS::EC2::VPCDHCPOptionsAssociation  VPCDHCPOptionsAssociation
+2023-12-19 16:02:31.542000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCDHCPOptionsAssociation  VPCDHCPOptionsAssociation                Resource creation Initiated
+2023-12-19 16:02:30.248000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCDHCPOptionsAssociation  VPCDHCPOptionsAssociation
+2023-12-19 16:02:26.674000+00:00  CREATE_COMPLETE     AWS::EC2::DHCPOptions                DHCPOptions
+2023-12-19 16:02:21.131000+00:00  CREATE_IN_PROGRESS  AWS::EC2::DHCPOptions                DHCPOptions                              Resource creation Initiated
+2023-12-19 16:02:19.477000+00:00  CREATE_IN_PROGRESS  AWS::EC2::DHCPOptions                DHCPOptions
+2023-12-19 16:02:15.710000+00:00  CREATE_COMPLETE     AWS::DirectoryService::MicrosoftAD   MicrosoftAD
+2023-12-19 15:31:52.913000+00:00  CREATE_COMPLETE     AWS::EC2::SecurityGroupIngress       DomainMembersIngressWinRMHTTPS
+2023-12-19 15:31:52.627000+00:00  CREATE_COMPLETE     AWS::EC2::SecurityGroupIngress       DomainMembersIngressWinRMHTTP
+2023-12-19 15:31:52.264000+00:00  CREATE_COMPLETE     AWS::EC2::SecurityGroupIngress       DomainMembersIngressRDP
+2023-12-19 15:31:52.229000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroupIngress       DomainMembersIngressWinRMHTTPS           Resource creation Initiated
+2023-12-19 15:31:52.056000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroupIngress       DomainMembersIngressWinRMHTTP            Resource creation Initiated
+2023-12-19 15:31:51.983000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroupIngress       DomainMembersIngressWinRMHTTPS
+2023-12-19 15:31:51.861000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroupIngress       DomainMembersIngressWinRMHTTP
+2023-12-19 15:31:51.583000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroupIngress       DomainMembersIngressRDP                  Resource creation Initiated
+2023-12-19 15:31:51.342000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroupIngress       DomainMembersIngressRDP
+2023-12-19 15:31:47.931000+00:00  CREATE_COMPLETE     AWS::EC2::SecurityGroup              DomainMemberSG
+2023-12-19 15:31:47.358000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroup              DomainMemberSG                           Resource creation Initiated
+2023-12-19 15:31:43.743000+00:00  CREATE_COMPLETE     AWS::SecretsManager::Secret          ADAdminSecrets
+2023-12-19 15:31:43.319000+00:00  CREATE_IN_PROGRESS  AWS::SecretsManager::Secret          ADAdminSecrets                           Resource creation Initiated
+2023-12-19 15:31:42.518000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroup              DomainMemberSG
+2023-12-19 15:31:41.852000+00:00  CREATE_IN_PROGRESS  AWS::DirectoryService::MicrosoftAD   MicrosoftAD                              Resource creation Initiated
+2023-12-19 15:31:41.490000+00:00  CREATE_IN_PROGRESS  AWS::SecretsManager::Secret          ADAdminSecrets
+2023-12-19 15:31:41.206000+00:00  CREATE_IN_PROGRESS  AWS::DirectoryService::MicrosoftAD   MicrosoftAD
+2023-12-19 15:31:34.296000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack           tCaT-duomfa-3606fb-ADStack-CM4ADPQJJNXJ  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 19. December 2023 10:17AM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-east-1
+StackName: tCaT-duomfa-3606fb-DuoStack-1GOWNCD1SQLSD
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                                 LogicalResourceId                                             ResourceStatusReason
+--------------------------------  ------------------  -------------------------------------------  ------------------------------------------------------------  ---------------------------
+2023-12-19 16:15:26.573000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack                   tCaT-duomfa-3606fb-DuoStack-1GOWNCD1SQLSD
+2023-12-19 16:15:21.970000+00:00  CREATE_COMPLETE     AWS::Lambda::Permission                      PermissionForEventsToInvokeLambda
+2023-12-19 16:15:21.706000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Permission                      PermissionForEventsToInvokeLambda                             Resource creation Initiated
+2023-12-19 16:15:20.650000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Permission                      PermissionForEventsToInvokeLambda
+2023-12-19 16:15:19.510000+00:00  CREATE_COMPLETE     AWS::Events::Rule                            DuoServiceEvents
+2023-12-19 16:14:40.116000+00:00  CREATE_COMPLETE     AWS::SecretsManager::RotationSchedule        DuoConfigurationSettingsSecretRotationSchedule
+2023-12-19 16:14:39.870000+00:00  CREATE_IN_PROGRESS  AWS::SecretsManager::RotationSchedule        DuoConfigurationSettingsSecretRotationSchedule                Resource creation Initiated
+2023-12-19 16:14:38.361000+00:00  CREATE_IN_PROGRESS  AWS::SecretsManager::RotationSchedule        DuoConfigurationSettingsSecretRotationSchedule
+2023-12-19 16:14:37.446000+00:00  CREATE_COMPLETE     AWS::Lambda::Permission                      DuoConfigurationSettingsSecretRotationLambdaInvokePermission
+2023-12-19 16:14:37.160000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Permission                      DuoConfigurationSettingsSecretRotationLambdaInvokePermission  Resource creation Initiated
+2023-12-19 16:14:36.122000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Permission                      DuoConfigurationSettingsSecretRotationLambdaInvokePermission
+2023-12-19 16:14:35.259000+00:00  CREATE_COMPLETE     AWS::Lambda::Function                        RotateRadiusSharedSecretFunction
+2023-12-19 16:14:29.484000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        RotateRadiusSharedSecretFunction                              Resource creation Initiated
+2023-12-19 16:14:28.022000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        RotateRadiusSharedSecretFunction
+2023-12-19 16:14:26.594000+00:00  CREATE_COMPLETE     AWS::IAM::Role                               RadiusSharedSecretRotationRole
+2023-12-19 16:14:23.691000+00:00  CREATE_COMPLETE     AWS::ApplicationAutoScaling::ScalingPolicy   DuoServiceScalingPolicyMem
+2023-12-19 16:14:23.409000+00:00  CREATE_COMPLETE     AWS::ApplicationAutoScaling::ScalingPolicy   DuoServiceScalingPolicyCpu
+2023-12-19 16:14:23.354000+00:00  CREATE_IN_PROGRESS  AWS::ApplicationAutoScaling::ScalingPolicy   DuoServiceScalingPolicyMem                                    Resource creation Initiated
+2023-12-19 16:14:23.123000+00:00  CREATE_IN_PROGRESS  AWS::ApplicationAutoScaling::ScalingPolicy   DuoServiceScalingPolicyCpu                                    Resource creation Initiated
+2023-12-19 16:14:18.773000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            DuoServiceEvents                                              Resource creation Initiated
+2023-12-19 16:14:17.673000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            DuoServiceEvents
+2023-12-19 16:14:16.049000+00:00  CREATE_COMPLETE     AWS::Lambda::Function                        ProcessDuoServiceFunction
+2023-12-19 16:14:11.544000+00:00  CREATE_IN_PROGRESS  AWS::ApplicationAutoScaling::ScalingPolicy   DuoServiceScalingPolicyMem
+2023-12-19 16:14:11.361000+00:00  CREATE_IN_PROGRESS  AWS::ApplicationAutoScaling::ScalingPolicy   DuoServiceScalingPolicyCpu
+2023-12-19 16:14:10.480000+00:00  CREATE_COMPLETE     AWS::ApplicationAutoScaling::ScalableTarget  DuoEcsScalableTarget
+2023-12-19 16:14:10.336000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        ProcessDuoServiceFunction                                     Resource creation Initiated
+2023-12-19 16:14:10.177000+00:00  CREATE_IN_PROGRESS  AWS::ApplicationAutoScaling::ScalableTarget  DuoEcsScalableTarget                                          Resource creation Initiated
+2023-12-19 16:14:10.132000+00:00  CREATE_COMPLETE     AWS::CloudWatch::Alarm                       DuoServiceAlarmMemory
+2023-12-19 16:14:10.128000+00:00  CREATE_COMPLETE     AWS::CloudWatch::Alarm                       DuoServiceAlarmCpu
+2023-12-19 16:14:10.007000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               RadiusSharedSecretRotationRole                                Resource creation Initiated
+2023-12-19 16:14:09.833000+00:00  CREATE_IN_PROGRESS  AWS::CloudWatch::Alarm                       DuoServiceAlarmCpu                                            Resource creation Initiated
+2023-12-19 16:14:09.787000+00:00  CREATE_IN_PROGRESS  AWS::CloudWatch::Alarm                       DuoServiceAlarmMemory                                         Resource creation Initiated
+2023-12-19 16:14:08.803000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        ProcessDuoServiceFunction
+2023-12-19 16:14:08.587000+00:00  CREATE_IN_PROGRESS  AWS::CloudWatch::Alarm                       DuoServiceAlarmMemory
+2023-12-19 16:14:08.583000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               RadiusSharedSecretRotationRole
+2023-12-19 16:14:08.523000+00:00  CREATE_IN_PROGRESS  AWS::ApplicationAutoScaling::ScalableTarget  DuoEcsScalableTarget
+2023-12-19 16:14:08.509000+00:00  CREATE_IN_PROGRESS  AWS::CloudWatch::Alarm                       DuoServiceAlarmCpu
+2023-12-19 16:14:07.283000+00:00  CREATE_COMPLETE     AWS::ECS::Service                            DuoService
+2023-12-19 16:13:31.709000+00:00  CREATE_IN_PROGRESS  AWS::ECS::Service                            DuoService                                                    Resource creation Initiated
+2023-12-19 16:13:29.859000+00:00  CREATE_IN_PROGRESS  AWS::ECS::Service                            DuoService
+2023-12-19 16:13:28.806000+00:00  CREATE_COMPLETE     AWS::ECS::TaskDefinition                     DuoTaskDefinition
+2023-12-19 16:13:28.525000+00:00  CREATE_IN_PROGRESS  AWS::ECS::TaskDefinition                     DuoTaskDefinition                                             Resource creation Initiated
+2023-12-19 16:13:27.109000+00:00  CREATE_IN_PROGRESS  AWS::ECS::TaskDefinition                     DuoTaskDefinition
+2023-12-19 16:13:25.864000+00:00  CREATE_COMPLETE     Custom::Poller                               DuoSnsCustomResource
+2023-12-19 16:13:25.559000+00:00  CREATE_IN_PROGRESS  Custom::Poller                               DuoSnsCustomResource                                          Resource creation Initiated
+2023-12-19 16:10:10.616000+00:00  CREATE_COMPLETE     AWS::Events::Rule                            DuoEcrPipelineCloudWatchEventRule
+2023-12-19 16:10:10.465000+00:00  CREATE_COMPLETE     AWS::Events::Rule                            DuoEcrPipelineWeeklyTrigger
+2023-12-19 16:09:54.303000+00:00  CREATE_COMPLETE     AWS::Lambda::Permission                      DuoSnsCustomResourceEventsToInvokeLambda
+2023-12-19 16:09:54.045000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Permission                      DuoSnsCustomResourceEventsToInvokeLambda                      Resource creation Initiated
+2023-12-19 16:09:52.975000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Permission                      DuoSnsCustomResourceEventsToInvokeLambda
+2023-12-19 16:09:52.653000+00:00  CREATE_IN_PROGRESS  Custom::Poller                               DuoSnsCustomResource
+2023-12-19 16:09:51.768000+00:00  CREATE_COMPLETE     AWS::Events::Rule                            DuoPipelineSnsEvents
+2023-12-19 16:09:51.330000+00:00  CREATE_COMPLETE     AWS::Events::Rule                            DuoEcrPipelineEvents
+2023-12-19 16:09:09.843000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            DuoEcrPipelineCloudWatchEventRule                             Resource creation Initiated
+2023-12-19 16:09:09.737000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            DuoEcrPipelineWeeklyTrigger                                   Resource creation Initiated
+2023-12-19 16:09:08.751000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            DuoEcrPipelineCloudWatchEventRule
+2023-12-19 16:09:08.463000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            DuoEcrPipelineWeeklyTrigger
+2023-12-19 16:09:07.294000+00:00  CREATE_COMPLETE     AWS::IAM::Role                               DuoEcrPipelineCloudWatchEventRole
+2023-12-19 16:08:50.939000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            DuoPipelineSnsEvents                                          Resource creation Initiated
+2023-12-19 16:08:50.714000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoEcrPipelineCloudWatchEventRole                             Resource creation Initiated
+2023-12-19 16:08:50.592000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            DuoEcrPipelineEvents                                          Resource creation Initiated
+2023-12-19 16:08:49.482000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoEcrPipelineCloudWatchEventRole
+2023-12-19 16:08:49.447000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            DuoPipelineSnsEvents
+2023-12-19 16:08:49.426000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            DuoEcrPipelineEvents
+2023-12-19 16:08:48.655000+00:00  CREATE_COMPLETE     AWS::CodePipeline::Pipeline                  DuoEcrPipeline
+2023-12-19 16:08:48.225000+00:00  CREATE_COMPLETE     AWS::S3::BucketPolicy                        ArtifactBucketPolicy
+2023-12-19 16:08:48.158000+00:00  CREATE_IN_PROGRESS  AWS::CodePipeline::Pipeline                  DuoEcrPipeline                                                Resource creation Initiated
+2023-12-19 16:08:47.762000+00:00  CREATE_IN_PROGRESS  AWS::S3::BucketPolicy                        ArtifactBucketPolicy                                          Resource creation Initiated
+2023-12-19 16:08:47.489000+00:00  CREATE_IN_PROGRESS  AWS::CodePipeline::Pipeline                  DuoEcrPipeline
+2023-12-19 16:08:47.286000+00:00  CREATE_COMPLETE     AWS::Lambda::Permission                      UpdateDirectoryPermissionForEventsToInvokeLambda
+2023-12-19 16:08:46.936000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Permission                      UpdateDirectoryPermissionForEventsToInvokeLambda              Resource creation Initiated
+2023-12-19 16:08:46.616000+00:00  CREATE_COMPLETE     AWS::CodeBuild::Project                      DuoCodeBuildEcr
+2023-12-19 16:08:46.458000+00:00  CREATE_IN_PROGRESS  AWS::S3::BucketPolicy                        ArtifactBucketPolicy
+2023-12-19 16:08:46.100000+00:00  CREATE_IN_PROGRESS  AWS::CodeBuild::Project                      DuoCodeBuildEcr                                               Resource creation Initiated
+2023-12-19 16:08:45.820000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Permission                      UpdateDirectoryPermissionForEventsToInvokeLambda
+2023-12-19 16:08:44.810000+00:00  CREATE_IN_PROGRESS  AWS::CodeBuild::Project                      DuoCodeBuildEcr
+2023-12-19 16:08:44.710000+00:00  CREATE_COMPLETE     AWS::Events::Rule                            UpdateDirectoryServiceEvent
+2023-12-19 16:08:43.512000+00:00  CREATE_COMPLETE     AWS::IAM::Role                               DuoCodeBuildRole
+2023-12-19 16:08:43.417000+00:00  CREATE_COMPLETE     AWS::IAM::Role                               DuoCodePipelineRole
+2023-12-19 16:08:27.086000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoCodeBuildRole                                              Resource creation Initiated
+2023-12-19 16:08:27.054000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoCodePipelineRole                                           Resource creation Initiated
+2023-12-19 16:08:25.881000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoCodeBuildRole
+2023-12-19 16:08:25.750000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoCodePipelineRole
+2023-12-19 16:08:24.855000+00:00  CREATE_COMPLETE     AWS::IAM::ManagedPolicy                      DuoCodeBuildPolicy
+2023-12-19 16:08:09.295000+00:00  CREATE_IN_PROGRESS  AWS::IAM::ManagedPolicy                      DuoCodeBuildPolicy                                            Resource creation Initiated
+2023-12-19 16:08:07.974000+00:00  CREATE_IN_PROGRESS  AWS::IAM::ManagedPolicy                      DuoCodeBuildPolicy
+2023-12-19 16:08:06.087000+00:00  CREATE_COMPLETE     AWS::CodeCommit::Repository                  DuoEcrCodeCommitRepo
+2023-12-19 16:08:05.925000+00:00  CREATE_IN_PROGRESS  AWS::CodeCommit::Repository                  DuoEcrCodeCommitRepo                                          Resource creation Initiated
+2023-12-19 16:08:02.976000+00:00  CREATE_IN_PROGRESS  AWS::CodeCommit::Repository                  DuoEcrCodeCommitRepo
+2023-12-19 16:08:01.759000+00:00  CREATE_COMPLETE     Custom::DuoCleanup                           DuoCleanupCustomResource
+2023-12-19 16:08:01.449000+00:00  CREATE_IN_PROGRESS  Custom::DuoCleanup                           DuoCleanupCustomResource                                      Resource creation Initiated
+2023-12-19 16:07:58.698000+00:00  CREATE_COMPLETE     AWS::KMS::Alias                              DuoKmsKeyAlias
+2023-12-19 16:07:58.281000+00:00  CREATE_IN_PROGRESS  Custom::DuoCleanup                           DuoCleanupCustomResource
+2023-12-19 16:07:57.269000+00:00  CREATE_COMPLETE     AWS::Lambda::Function                        DuoCleanupFunction
+2023-12-19 16:07:56.536000+00:00  CREATE_COMPLETE     AWS::EC2::SecurityGroupEgress                DirectoryEgressRule
+2023-12-19 16:07:56.127000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroupEgress                DirectoryEgressRule                                           Resource creation Initiated
+2023-12-19 16:07:54.934000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroupEgress                DirectoryEgressRule
+2023-12-19 16:07:53.935000+00:00  CREATE_COMPLETE     AWS::EC2::SecurityGroup                      DuoServiceSg
+2023-12-19 16:07:52.755000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroup                      DuoServiceSg                                                  Resource creation Initiated
+2023-12-19 16:07:51.540000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        DuoCleanupFunction                                            Resource creation Initiated
+2023-12-19 16:07:50.049000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        DuoCleanupFunction
+2023-12-19 16:07:48.818000+00:00  CREATE_COMPLETE     AWS::IAM::Role                               DuoCleanupServiceRole
+2023-12-19 16:07:47.932000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroup                      DuoServiceSg
+2023-12-19 16:07:46.990000+00:00  CREATE_COMPLETE     Custom::GetDirectoryService                  GetDirectoryServiceDetails
+2023-12-19 16:07:46.727000+00:00  CREATE_IN_PROGRESS  Custom::GetDirectoryService                  GetDirectoryServiceDetails                                    Resource creation Initiated
+2023-12-19 16:07:44.915000+00:00  CREATE_COMPLETE     AWS::Lambda::Permission                      DuoSnsCustomResourcePermissionLambda
+2023-12-19 16:07:44.638000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Permission                      DuoSnsCustomResourcePermissionLambda                          Resource creation Initiated
+2023-12-19 16:07:43.939000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            UpdateDirectoryServiceEvent                                   Resource creation Initiated
+2023-12-19 16:07:43.563000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Permission                      DuoSnsCustomResourcePermissionLambda
+2023-12-19 16:07:43.267000+00:00  CREATE_IN_PROGRESS  Custom::GetDirectoryService                  GetDirectoryServiceDetails
+2023-12-19 16:07:42.822000+00:00  CREATE_IN_PROGRESS  AWS::Events::Rule                            UpdateDirectoryServiceEvent
+2023-12-19 16:07:42.723000+00:00  CREATE_COMPLETE     AWS::SNS::Subscription                       DuoSnsCustomResourceTopicSubscriptionLambda
+2023-12-19 16:07:42.587000+00:00  CREATE_IN_PROGRESS  AWS::SNS::Subscription                       DuoSnsCustomResourceTopicSubscriptionLambda                   Resource creation Initiated
+2023-12-19 16:07:42.298000+00:00  CREATE_COMPLETE     AWS::Lambda::Function                        GetDirectoryServiceFunction
+2023-12-19 16:07:41.818000+00:00  CREATE_IN_PROGRESS  AWS::SNS::Subscription                       DuoSnsCustomResourceTopicSubscriptionLambda
+2023-12-19 16:07:41.563000+00:00  CREATE_COMPLETE     AWS::Lambda::Function                        UpdateDirectoryServiceMfaSettings
+2023-12-19 16:07:40.892000+00:00  CREATE_COMPLETE     AWS::Lambda::Function                        DuoSnsCustomResourceLambda
+2023-12-19 16:07:36.625000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        GetDirectoryServiceFunction                                   Resource creation Initiated
+2023-12-19 16:07:35.499000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        UpdateDirectoryServiceMfaSettings                             Resource creation Initiated
+2023-12-19 16:07:35.270000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        DuoSnsCustomResourceLambda                                    Resource creation Initiated
+2023-12-19 16:07:35.196000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        GetDirectoryServiceFunction
+2023-12-19 16:07:34.142000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        UpdateDirectoryServiceMfaSettings
+2023-12-19 16:07:34.094000+00:00  CREATE_COMPLETE     AWS::IAM::Role                               GetDirectoryServiceMfaSettingsRole
+2023-12-19 16:07:33.899000+00:00  CREATE_IN_PROGRESS  AWS::Lambda::Function                        DuoSnsCustomResourceLambda
+2023-12-19 16:07:33.011000+00:00  CREATE_COMPLETE     AWS::IAM::Role                               UpdateDirectoryServiceMfaSettingsRole
+2023-12-19 16:07:32.749000+00:00  CREATE_COMPLETE     AWS::IAM::Role                               DuoTaskRoleArn
+2023-12-19 16:07:32.612000+00:00  CREATE_COMPLETE     AWS::IAM::Role                               ProcessDuoServiceEventsRole
+2023-12-19 16:07:32.549000+00:00  CREATE_COMPLETE     AWS::IAM::Role                               DuoSnsCustomResourceLambdaRole
+2023-12-19 16:07:32.192000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoCleanupServiceRole                                         Resource creation Initiated
+2023-12-19 16:07:30.773000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoCleanupServiceRole
+2023-12-19 16:07:27.811000+00:00  CREATE_COMPLETE     AWS::S3::Bucket                              ArtifactBucket
+2023-12-19 16:07:16.656000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               UpdateDirectoryServiceMfaSettingsRole                         Resource creation Initiated
+2023-12-19 16:07:16.254000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoTaskRoleArn                                                Resource creation Initiated
+2023-12-19 16:07:16.188000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               ProcessDuoServiceEventsRole                                   Resource creation Initiated
+2023-12-19 16:07:16.090000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               GetDirectoryServiceMfaSettingsRole                            Resource creation Initiated
+2023-12-19 16:07:15.971000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoSnsCustomResourceLambdaRole                                Resource creation Initiated
+2023-12-19 16:07:14.974000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               UpdateDirectoryServiceMfaSettingsRole
+2023-12-19 16:07:14.932000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               ProcessDuoServiceEventsRole
+2023-12-19 16:07:14.777000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               GetDirectoryServiceMfaSettingsRole
+2023-12-19 16:07:14.751000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoTaskRoleArn
+2023-12-19 16:07:14.737000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role                               DuoSnsCustomResourceLambdaRole
+2023-12-19 16:07:13.882000+00:00  CREATE_COMPLETE     AWS::IAM::ManagedPolicy                      DuoKmsIamPolicy
+2023-12-19 16:07:07.995000+00:00  CREATE_COMPLETE     AWS::SNS::TopicPolicy                        DuoNotificationPolicy
+2023-12-19 16:07:07.558000+00:00  CREATE_IN_PROGRESS  AWS::SNS::TopicPolicy                        DuoNotificationPolicy                                         Resource creation Initiated
+2023-12-19 16:07:06.537000+00:00  CREATE_IN_PROGRESS  AWS::SNS::TopicPolicy                        DuoNotificationPolicy
+2023-12-19 16:07:05.183000+00:00  CREATE_COMPLETE     AWS::SNS::Topic                              DuoNotification
+2023-12-19 16:07:04.714000+00:00  CREATE_IN_PROGRESS  AWS::SNS::Topic                              DuoNotification                                               Resource creation Initiated
+2023-12-19 16:07:01.309000+00:00  CREATE_IN_PROGRESS  AWS::S3::Bucket                              ArtifactBucket                                                Resource creation Initiated
+2023-12-19 16:06:59.174000+00:00  CREATE_COMPLETE     AWS::SNS::Topic                              DuoSnsCustomResourceTopic
+2023-12-19 16:06:58.924000+00:00  CREATE_IN_PROGRESS  AWS::SNS::Topic                              DuoSnsCustomResourceTopic                                     Resource creation Initiated
+2023-12-19 16:06:58.913000+00:00  CREATE_COMPLETE     AWS::SecretsManager::Secret                  DuoConfigurationSettingsSecret
+2023-12-19 16:06:58.618000+00:00  CREATE_IN_PROGRESS  AWS::SecretsManager::Secret                  DuoConfigurationSettingsSecret                                Resource creation Initiated
+2023-12-19 16:06:58.432000+00:00  CREATE_IN_PROGRESS  AWS::IAM::ManagedPolicy                      DuoKmsIamPolicy                                               Resource creation Initiated
+2023-12-19 16:06:58.218000+00:00  CREATE_IN_PROGRESS  AWS::KMS::Alias                              DuoKmsKeyAlias                                                Resource creation Initiated
+2023-12-19 16:06:57.565000+00:00  CREATE_IN_PROGRESS  AWS::SNS::Topic                              DuoSnsCustomResourceTopic
+2023-12-19 16:06:57.391000+00:00  CREATE_IN_PROGRESS  AWS::IAM::ManagedPolicy                      DuoKmsIamPolicy
+2023-12-19 16:06:57.285000+00:00  CREATE_IN_PROGRESS  AWS::SecretsManager::Secret                  DuoConfigurationSettingsSecret
+2023-12-19 16:06:57.230000+00:00  CREATE_IN_PROGRESS  AWS::S3::Bucket                              ArtifactBucket
+2023-12-19 16:06:57.216000+00:00  CREATE_IN_PROGRESS  AWS::SNS::Topic                              DuoNotification
+2023-12-19 16:06:57.003000+00:00  CREATE_IN_PROGRESS  AWS::KMS::Alias                              DuoKmsKeyAlias
+2023-12-19 16:06:56.069000+00:00  CREATE_COMPLETE     AWS::KMS::Key                                DuoKmsKey
+2023-12-19 16:04:58.646000+00:00  CREATE_COMPLETE     AWS::ECS::Cluster                            DuoCluster
+2023-12-19 16:04:55.736000+00:00  CREATE_COMPLETE     AWS::Logs::LogGroup                          RadiusProxyCloudWatchLogsGroup
+2023-12-19 16:04:55.727000+00:00  CREATE_COMPLETE     AWS::SSM::Parameter                          DuoCustomResourceEvent
+2023-12-19 16:04:55.709000+00:00  CREATE_COMPLETE     AWS::ECR::Repository                         DuoEcrRepository
+2023-12-19 16:04:55.644000+00:00  CREATE_COMPLETE     AWS::SSM::Parameter                          DuoServiceIps
+2023-12-19 16:04:55.429000+00:00  CREATE_IN_PROGRESS  AWS::SSM::Parameter                          DuoCustomResourceEvent                                        Resource creation Initiated
+2023-12-19 16:04:55.423000+00:00  CREATE_IN_PROGRESS  AWS::ECR::Repository                         DuoEcrRepository                                              Resource creation Initiated
+2023-12-19 16:04:55.417000+00:00  CREATE_IN_PROGRESS  AWS::Logs::LogGroup                          RadiusProxyCloudWatchLogsGroup                                Resource creation Initiated
+2023-12-19 16:04:55.408000+00:00  CREATE_IN_PROGRESS  AWS::KMS::Key                                DuoKmsKey                                                     Resource creation Initiated
+2023-12-19 16:04:55.351000+00:00  CREATE_IN_PROGRESS  AWS::SSM::Parameter                          DuoServiceIps                                                 Resource creation Initiated
+2023-12-19 16:04:55.091000+00:00  CREATE_IN_PROGRESS  AWS::ECS::Cluster                            DuoCluster                                                    Resource creation Initiated
+2023-12-19 16:04:54.201000+00:00  CREATE_IN_PROGRESS  AWS::KMS::Key                                DuoKmsKey
+2023-12-19 16:04:54.196000+00:00  CREATE_IN_PROGRESS  AWS::Logs::LogGroup                          RadiusProxyCloudWatchLogsGroup
+2023-12-19 16:04:54.165000+00:00  CREATE_IN_PROGRESS  AWS::SSM::Parameter                          DuoCustomResourceEvent
+2023-12-19 16:04:54.158000+00:00  CREATE_IN_PROGRESS  AWS::SSM::Parameter                          DuoServiceIps
+2023-12-19 16:04:54.123000+00:00  CREATE_IN_PROGRESS  AWS::ECR::Repository                         DuoEcrRepository
+2023-12-19 16:04:54.066000+00:00  CREATE_IN_PROGRESS  AWS::ECS::Cluster                            DuoCluster
+2023-12-19 16:04:47.165000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack                   tCaT-duomfa-3606fb-DuoStack-1GOWNCD1SQLSD                     User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Tuesday, 19. December 2023 10:17AM
+-----------------------------------------------------------------------------
+
