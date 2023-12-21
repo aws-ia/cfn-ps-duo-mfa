@@ -633,7 +633,7 @@ Resources:
           Value:
             Ref: DirectoryServiceId
       Code:
-        ZipFile: "import boto3\nimport os\nimport json\n\necs = boto3.client('ecs')\n ssm = boto3.client('ssm')\n\nos_srv = os.environ['DuoService']\nos_cluster = os.environ['DuoCluster']\n\ndef lambda_handler(event,\
+        ZipFile: "import boto3\nimport os\nimport json\n\necs = boto3.client('ecs')\nssm = boto3.client('ssm')\n\nos_srv = os.environ['DuoService']\nos_cluster = os.environ['DuoCluster']\n\ndef lambda_handler(event,\
           \ context):\n  duo_cluster = event['detail']['clusterArn']\n  duo_service = event['resources'][0]\n  old_ips = ssm.get_parameter(Name=os.environ['DuoSsm'])['Parameter']['Value']\n  if os_srv ==\
           \ duo_service:\n    if os_cluster == duo_cluster:\n      print('Cluster and service names match')\n      r = ecs.list_tasks(cluster=duo_cluster, serviceName=duo_service, desiredStatus='RUNNING',\
           \ launchType='FARGATE')\n      s = ecs.describe_tasks(cluster=duo_cluster,tasks=r['taskArns'])\n\n      ip=[]\n      for task in s['tasks']:\n        for con in task['containers']:\n         \
@@ -716,7 +716,7 @@ Resources:
             Ref: DirectoryServiceId
       Code:
         ZipFile: "import boto3\nimport os\nimport json\nimport time\n\nsecretsmanager_client = boto3.client('secretsmanager')\nssm_client = boto3.client('ssm')\nlambda_client = boto3.client('lambda')\n\
-          ecs = boto3.client('ecs')\nsrv = os.environ['DuoService']\n duo_cluster = os.environ['DuoCluster']\n# func = os.environ['func_arn']\n def lambda_handler(event, context):\n    arn = event['SecretId']\n\
+          ecs = boto3.client('ecs')\nsrv = os.environ['DuoService']\nduo_cluster = os.environ['DuoCluster']\n# func = os.environ['func_arn']\n\ndef lambda_handler(event, context):\n    arn = event['SecretId']\n\
           \    token = event['ClientRequestToken']\n    step = event['Step']\n\n    if step == \"createSecret\":\n        create_secret(secretsmanager_client, arn, token)\n\n    elif step == \"finishSecret\"\
           :\n        finish_secret(secretsmanager_client, arn, token)\n        \n    ecs.update_service(cluster=duo_cluster,service=srv, forceNewDeployment=True)\n\ndef create_secret(secretsmanager_client,\
           \ arn, token):\n    # Get the secret\n    secret = json.loads(secretsmanager_client.get_secret_value(SecretId=arn, VersionStage=\"AWSCURRENT\")['SecretString'])\n\n    # Generate a random password\n\
@@ -848,9 +848,9 @@ Resources:
             Ref: DirectoryServiceId
       Code:
         ZipFile: "import os\nimport boto3\nimport json\nimport time\nfrom enum import Enum\n\nclass RadiusStatus(Enum):\n  Creating = 1\n  Completed = 2\n  Failed = 3\n  NotConfigured = 4\n\nRADIUS_TIMEOUT\
-          \ = 5\nRADIUS_RETRIES = 2\nRADIUS_AUTHENTICATION_PROTOCOL = 'PAP'\n\nds_client = boto3.client('ds')\nsc = boto3.client('secretsmanager')\n ssm =boto3.client('ssm')\nsns = boto3.client('sns')\n\
-          \nds_id = os.environ['ds_id']\n ips = ssm.get_parameter(Name=os.environ['DuoSsm'])['Parameter']['Value']\n def lambda_handler(event, context):\n  print(json.dumps(event))\n  \n  print('Directory\
-          \ Service Id: {}'.format(ds_id))\n  print('Fargate IP Addresses : {}'.format(ips))\n  \n  enable_radius(ds_id, ips)\n\n\ndef enable_radius(ds_id, nlb):\n\n    port = int(os.environ['proxy_port'])\n\
+          \ = 5\nRADIUS_RETRIES = 2\nRADIUS_AUTHENTICATION_PROTOCOL = 'PAP'\n\nds_client = boto3.client('ds')\nsc = boto3.client('secretsmanager')\nssm = boto3.client('ssm')\nsns = boto3.client('sns')\n\
+          \nds_id = os.environ['ds_id']\nips = ssm.get_parameter(Name=os.environ['DuoSsm'])['Parameter']['Value']\n\ndef lambda_handler(event, context):\n  print(json.dumps(event))\n  \n  print('Directory\
+          \ Service Id: {}'.format(ds_id))\n  print('Fargate IP Addresses : {}'.format(ips))\n  \n  enable_radius(ds_id, ips)\n\ndef enable_radius(ds_id, nlb):\n\n    port = int(os.environ['proxy_port'])\n\
           \    rs = get_rs(os.environ['rs_arn'])\n\n    radius_settings = {\n        \"RadiusServers\": [nlb],\n        \"RadiusPort\": port,\n        \"RadiusTimeout\": RADIUS_TIMEOUT,\n        \"RadiusRetries\"\
           : RADIUS_RETRIES,\n        \"SharedSecret\": rs,\n        \"AuthenticationProtocol\": RADIUS_AUTHENTICATION_PROTOCOL,\n        \"DisplayLabel\": \"Duo MFA\"\n    }\n\n    # Determine whether RADIUS\
           \ has been configured.\n    radius_current = radius_status(ds_id)\n    print('Current RADIUS status: {}.'.format(radius_current))\n\n    # Enable RADIUS.\n    if radius_current in [RadiusStatus.NotConfigured,\
@@ -861,7 +861,7 @@ Resources:
           \ ds_client.describe_directories(DirectoryIds=[ds_id])['DirectoryDescriptions'][0]\n\n        print(\"** ATTEMPT {}: {}\".format(attempt_number, r['RadiusStatus']))\n\n        if r['RadiusStatus']\
           \ == 'Completed':\n            print('Radius updated successfully')\n            break\n        elif r['RadiusStatus'] == 'Failed':\n            print('Radius creation failed')\n            break\n\
           \        else:\n            time.sleep(SLEEP_TIME)\n            attempt_number +=1\n    \n    if attempt_number == MAX_ATTEMPTS:\n      print('Radius create/update timed out')\n      msg = 'Duo\
-          \ MFA update failed on '+ ds_id +'. Please check.'\n      sns.publish(TopicArn=os.environ['Topic'], Message=msg, Subject='Failed to update MFA')\n\n\ndef radius_status(ds_id):\n    return_value\
+          \ MFA update failed on '+ ds_id +'. Please check.'\n      sns.publish(TopicArn=os.environ['Topic'], Message=msg, Subject='Failed to update MFA')\n\ndef radius_status(ds_id):\n    return_value\
           \ = -1\n    r = ds_client.describe_directories(DirectoryIds=[ds_id])['DirectoryDescriptions'][0]\n    if 'RadiusStatus' not in r:\n        return_value = RadiusStatus.NotConfigured\n    elif r['RadiusStatus']\
           \ == 'Completed':\n        return_value = RadiusStatus.Completed\n    elif r['RadiusStatus'] == 'Failed':\n        return_value = RadiusStatus.Failed\n    elif r['RadiusStatus'] == 'Creating':\n\
           \        return_value = RadiusStatus.Creating\n    return return_value\n\ndef get_rs(rs_arn):\n    rs = ''\n    r = sc.get_secret_value(\n        SecretId = rs_arn\n    )\n    if 'SecretString'\
