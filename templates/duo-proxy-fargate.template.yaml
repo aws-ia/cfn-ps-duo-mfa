@@ -6,6 +6,7 @@ Metadata:
       ignore_checks:
         - W9001
         - W9006
+        - E3030
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
@@ -298,7 +299,7 @@ Resources:
         Fn::GetAtt:
           - GetDirectoryServiceMfaSettingsRole
           - Arn
-      Runtime: python3.7
+      Runtime: python3.12
       Timeout: 60
       Tags:
         - Key: duo:DirectoryServiceId
@@ -616,7 +617,7 @@ Resources:
         Fn::GetAtt:
           - ProcessDuoServiceEventsRole
           - Arn
-      Runtime: python3.7
+      Runtime: python3.12
       Timeout: 900
       Environment:
         Variables:
@@ -695,7 +696,7 @@ Resources:
         Fn::GetAtt:
           - RadiusSharedSecretRotationRole
           - Arn
-      Runtime: python3.7
+      Runtime: python3.12
       Timeout: 900
       Environment:
         Variables:
@@ -828,7 +829,7 @@ Resources:
         Fn::GetAtt:
           - UpdateDirectoryServiceMfaSettingsRole
           - Arn
-      Runtime: python3.7
+      Runtime: python3.12
       Timeout: 900
       Environment:
         Variables:
@@ -1484,7 +1485,7 @@ Resources:
         Fn::GetAtt:
           - DuoSnsCustomResourceLambdaRole
           - Arn
-      Runtime: python3.7
+      Runtime: python3.12
       Timeout: 900
       Environment:
         Variables:
@@ -1667,7 +1668,7 @@ Resources:
         Fn::GetAtt:
           - DuoCleanupServiceRole
           - Arn
-      Runtime: python3.7
+      Runtime: python3.12
       Timeout: 900
       Environment:
         Variables:

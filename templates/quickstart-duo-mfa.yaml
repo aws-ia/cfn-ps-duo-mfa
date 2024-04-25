@@ -8,6 +8,7 @@ Metadata:
         - W3011
         - W9001
         - W9006
+        - E3030
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
@@ -737,7 +738,7 @@ Resources:
     Properties:
       Description: Copies objects from a source S3 bucket to a destination
       Handler: index.handler
-      Runtime: python3.7
+      Runtime: python3.12
       Role:
         Fn::GetAtt:
           - CopyZipsRole
