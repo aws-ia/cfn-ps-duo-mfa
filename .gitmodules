@@ -6,3 +6,6 @@
 	path = submodules/cfn-ps-aws-vpc
 	url = https://github.com/aws-ia/cfn-ps-aws-vpc.git
 	branch = main
+[submodule "submodules/cfn-ps-microsoft-activedirectory"]
+	path = submodules/cfn-ps-microsoft-activedirectory
+	branch = main
